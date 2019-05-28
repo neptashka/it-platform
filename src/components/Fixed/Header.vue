@@ -8,9 +8,11 @@
       class="header__logo"
       src="../../../src/images/logos/main-logo.svg"
       alt="Logo"
-      @click="$router.push('/')"
+      @click="homeClick"
     />
-    <div class="header__buttons" v-if="isHomePage">
+    <div
+      class="header__buttons"
+      v-if="isHomePage">
       <v-btn
         flat
         round
@@ -40,12 +42,59 @@
         Log in
       </v-btn>
     </div>
+    <div class="header__buttons" v-if="isLoginPage">
+      <v-btn
+        flat
+        round
+        append
+        outline
+        color="white"
+        @click="$router.replace('/register')">
+        Sign up
+      </v-btn>
+    </div>
+    <div class="header__buttons" v-if="isRegisrered">
+      <v-btn
+        flat
+        round
+        append
+        color="white"
+        @click="$router.replace('/it-companies')">
+        ІТ-компанії
+      </v-btn>
+      <v-btn
+        flat
+        round
+        append
+        color="white"
+        @click="$router.replace('/it-specialists')">
+        ІТ-спеціалісти
+      </v-btn>
+      <v-btn
+        flat
+        round
+        append
+        color="white"
+        @click="$router.replace('/vacancies')">
+        Вакансії
+      </v-btn>
+      <v-btn
+        flat
+        round
+        append
+        color="white"
+        @click="$router.push('/profile')">
+        Профіль
+      </v-btn>
+    </div>
   </v-toolbar>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 const HOME_PATH = '/'
 const REGISTER_PATH = '/register'
+const LOGIN_PATH = '/login'
 
 export default {
   name: 'Header',
@@ -53,11 +102,26 @@ export default {
     headerColor: String
   },
   computed: {
+    ...mapGetters(['user']),
     isHomePage() {
       return this.$route.path === HOME_PATH
     },
     isRegisterPage() {
       return this.$route.path === REGISTER_PATH
+    },
+    isLoginPage() {
+      return this.$route.path === LOGIN_PATH
+    },
+    isRegisrered() {
+      return this.user && this.$route.path !== HOME_PATH
+    }
+  },
+  mounted() {
+    console.log(this.user)
+  },
+  methods: {
+    homeClick() {
+      !this.user && this.$router.push('/')
     }
   }
 }

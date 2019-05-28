@@ -18,9 +18,9 @@
         </h1>
         <a @click="$router.push(`/${item.link}`)">
           <img
-              class="slider__image"
-              :src="loadImage(item.path)"
-              alt="IT-specialist image"/>
+            class="slider__image"
+            :src="loadImage(item.path)"
+            alt="IT-specialist image"/>
         </a>
       </v-sheet>
     </v-carousel-item>

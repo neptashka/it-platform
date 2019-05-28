@@ -10,10 +10,10 @@
     </div>
     <v-form class="form__vertical-container" v-model="valid">
       <v-text-field
+        required
         v-model="email"
         :rules="emailRules"
-        label="E-mail"
-        required>
+        label="E-mail">
       </v-text-field>
       <v-text-field
         v-model="password"
@@ -24,15 +24,27 @@
         label="Normal with hint text"
         hint="At least 8 characters"
         counter
-        @click:append="show1 = !show1">
+        @click:append="show1 = !show1"
+      >
       </v-text-field>
-      <v-btn @click="signUp">Sign up</v-btn>
+      <v-btn
+        v-if="formType === 'signUp'"
+        @click="signUp">
+        Реєстрація
+      </v-btn>
+      <v-btn
+        v-if="formType === 'logIn'"
+        @click="logIn">
+        Вхід
+      </v-btn>
     </v-form>
   </div>
 </template>
 
 <script>
 import firebase from 'firebase'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'Form',
   data: () => ({
@@ -55,18 +67,46 @@ export default {
       min: v => v.length >= 8 || 'Min 8 characters'
     }
   }),
+  computed: {
+    ...mapGetters(['user'])
+  },
+  props: {
+    userType: String,
+    formType: String
+  },
   methods: {
+    ...mapActions(['updateUser']),
     signUp() {
+      const self = this
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
-          function(user) {
-            alert('Your account has been created!' + user)
+          () => {
+            this.updateUser({
+              email: this.email,
+              type: this.userType
+            })
+            self.$router.replace('profile')
           },
           function(err) {
-            alert('OOPS' + err.message)
+            alert(err.message)
           }
+        )
+    },
+    logIn() {
+      const self = this
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(
+          () => {
+            this.updateUser({
+              email: this.email
+            })
+            self.$router.replace('profile')
+          },
+          err => alert(err.message)
         )
     }
   }
@@ -75,7 +115,8 @@ export default {
 
 <style>
 .form {
-  width: 600px;
+  padding: 10px 0 20px 0;
+  width: 90%;
   background-color: #fff;
   display: flex;
   flex-direction: column;

@@ -1,30 +1,25 @@
 <template>
-  <div class="login">
+  <div class="profile">
     <Header header-color="#000"></Header>
-    <LogIn></LogIn>
+    <h1>Profile</h1>
   </div>
 </template>
 
 <script>
-import LogIn from '../components/Authentication/LogIn'
 import Header from '../components/Fixed/Header'
-
 export default {
-  name: 'Login',
+  name: 'Profile',
   components: {
-    LogIn,
     Header
   }
 }
 </script>
 
 <style>
-.login {
-  background-color: #f8f8f8;
+.profile {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 </style>

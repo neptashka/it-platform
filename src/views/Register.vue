@@ -1,6 +1,8 @@
 <template>
-  <div class="about">
-    <Header header-color="#000"></Header>
+  <div class="registration">
+    <Header
+      header-color="#000">
+    </Header>
     <SignUp></SignUp>
   </div>
 </template>
@@ -16,3 +18,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.registration {
+  height: 100%;
+  width: 100%;
+}
+</style>
