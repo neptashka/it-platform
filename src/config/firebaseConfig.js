@@ -1,5 +1,3 @@
-import firebase from 'firebase'
-
 const firebaseConfig = {
   apiKey: 'AIzaSyBrV1RiojpsEgqK8ipx20tT-4pv9QyrBdY',
   authDomain: 'programmerplatform-43533.firebaseapp.com',
@@ -10,4 +8,4 @@ const firebaseConfig = {
   appId: '1:396616108751:web:cdd442f2e7012bef'
 }
 
-export const firebaseListener = () => firebase.initializeApp(firebaseConfig)
+export default firebaseConfig

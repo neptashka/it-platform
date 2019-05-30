@@ -44,6 +44,7 @@
 <script>
 import firebase from 'firebase'
 import { mapGetters, mapActions } from 'vuex'
+import { addITSpecialist } from '../../modules/db-service'
 
 export default {
   name: 'Form',
@@ -87,6 +88,10 @@ export default {
               email: this.email,
               type: this.userType
             })
+              addITSpecialist({
+                email: this.email
+              })
+            }
             self.$router.replace('profile')
           },
           function(err) {

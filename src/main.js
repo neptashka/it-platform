@@ -3,11 +3,15 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
-import { firebaseListener } from './config/firebaseConfig'
+import firebase from 'firebase'
+import 'firebase/firestore'
+import firebaseConfig from './config/firebaseConfig'
 
 Vue.config.productionTip = false
 
-firebaseListener()
+firebase.initializeApp(firebaseConfig)
+
+export const db = firebase.firestore()
 
 new Vue({
   router,
