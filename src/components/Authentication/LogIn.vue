@@ -17,6 +17,7 @@ export default {
 
 <style scoped>
 .login__form {
-  width: 50%;
+  width: 40%;
+  max-width: 510px;
 }
 </style>

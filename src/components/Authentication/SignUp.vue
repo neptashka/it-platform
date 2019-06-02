@@ -46,6 +46,7 @@
 
 <script>
 import Form from './Form'
+import { IT_SPECIALIST, HR_MANAGER } from '../../constants/userTypes'
 
 export default {
   name: 'SignUp',
@@ -54,20 +55,20 @@ export default {
   },
   data() {
     return {
-      userType: 'IT-specialist'
+      userType: IT_SPECIALIST
     }
   },
   computed: {
     userIsHr() {
-      return this.userType === 'HR-manager'
+      return this.userType === HR_MANAGER
     }
   },
   methods: {
     chooseDevType() {
-      this.userType = 'IT-specialist'
+      this.userType = IT_SPECIALIST
     },
     chooseHrType() {
-      this.userType = 'HR-manager'
+      this.userType = HR_MANAGER
     }
   }
 }

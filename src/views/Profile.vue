@@ -1,16 +1,19 @@
 <template>
   <div class="profile">
     <Header header-color="#000"></Header>
-    <h1>Profile</h1>
+    <ProfileContent></ProfileContent>
   </div>
 </template>
 
 <script>
 import Header from '../components/Fixed/Header'
+import ProfileContent from '../components/Profile/ProfileContent'
+
 export default {
   name: 'Profile',
   components: {
-    Header
+    Header,
+    ProfileContent
   }
 }
 </script>

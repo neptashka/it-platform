@@ -1,11 +1,11 @@
 <template>
-  <h1>blabla</h1>
+
 </template>
 
 <script>
-export default {
-  name: 'Profile'
-}
+  export default {
+    name: 'VacancyForm'
+  }
 </script>
 
 <style scoped>

@@ -1,5 +1,6 @@
 <template>
   <v-carousel
+    interval="3000"
     hide-delimiters>
     <v-carousel-item
       v-for="(item, i) in items"
@@ -36,21 +37,21 @@ export default {
     return {
       items: [
         {
-          title: 'Find vacancies for IT specialists',
+          title: 'Знайдіть вакансії для ІТ-спеціалістів',
           path: 'images/slider/vacancies.svg',
-          link: 'login',
+          link: 'register',
           color: 'rgb(36, 55, 87)'
         },
         {
-          title: `Find IT specialists, if you're a HR-manager`,
+          title: `Знайдіть ІТ-спеціалістів, якщо Ви - HR-менеджер`,
           path: 'images/slider/specialists.svg',
           link: 'register',
           color: 'rgb(25, 155, 251)'
         },
         {
-          title: `Check out all companies and their vacancies`,
+          title: `Перегляньте всі компанії та їх вакансії`,
           path: 'images/slider/it-companies.svg',
-          link: '',
+          link: 'register',
           color: 'rgb(254, 96, 93)'
         }
       ]

@@ -7,6 +7,7 @@ import Profile from '../views/Profile.vue'
 import ITcompanies from '../views/IT-companies.vue'
 import ITspecialists from '../views/IT-specialists.vue'
 import Vacancies from '../views/Vacancies.vue'
+import firebase from 'firebase'
 // import store from '../store/index'
 
 Vue.use(Router)
@@ -47,7 +48,7 @@ const router = new Router({
       }
     },
     {
-      path: '/vacancies',
+      path: '/it-specialists',
       name: 'IT-specialists',
       component: ITspecialists,
       meta: {
@@ -65,19 +66,12 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.authRequired)) {
-//     if (!store.state.user) {
-//       next({
-//         path: '/login',
-//         query: { redirect: '/profile' }
-//       })
-//     } else {
-//       next()
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const currentUser = firebase.auth().currentUser
+  const authRequired = to.matched.some(record =>
+  record.meta.authRequired)
+  if (authRequired && !currentUser) next('login')
+  else next()
+})
 
 export default router

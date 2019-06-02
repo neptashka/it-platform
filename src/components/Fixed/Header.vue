@@ -20,7 +20,7 @@
         color="white"
         @click="$router.push('/login')"
       >
-        Log in
+        Вхід
       </v-btn>
       <v-btn
         flat
@@ -29,7 +29,7 @@
         outline
         color="white"
         @click="$router.push('/register')">
-        Sign up
+        Реєстрація
       </v-btn>
     </div>
     <div class="header__buttons" v-if="isRegisterPage">
@@ -39,7 +39,7 @@
         append
         color="white"
         @click="$router.push('/login')">
-        Log in
+        Вхід
       </v-btn>
     </div>
     <div class="header__buttons" v-if="isLoginPage">
@@ -50,10 +50,10 @@
         outline
         color="white"
         @click="$router.replace('/register')">
-        Sign up
+        Реєстрація
       </v-btn>
     </div>
-    <div class="header__buttons" v-if="isRegisrered">
+    <div class="header__buttons" v-if="isRegistered">
       <v-btn
         flat
         round
@@ -92,12 +92,18 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import firebase from 'firebase'
 const HOME_PATH = '/'
 const REGISTER_PATH = '/register'
 const LOGIN_PATH = '/login'
 
 export default {
   name: 'Header',
+  data() {
+    return {
+      authorizedUser: false
+    }
+  },
   props: {
     headerColor: String
   },
@@ -112,12 +118,10 @@ export default {
     isLoginPage() {
       return this.$route.path === LOGIN_PATH
     },
-    isRegisrered() {
-      return this.user && this.$route.path !== HOME_PATH
+    isRegistered() {
+      const currentUser = firebase.auth().currentUser
+      return currentUser && this.$route.path !== HOME_PATH
     }
-  },
-  mounted() {
-    console.log(this.user)
   },
   methods: {
     homeClick() {

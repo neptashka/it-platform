@@ -44,18 +44,12 @@
 <script>
 import firebase from 'firebase'
 import { mapGetters, mapActions } from 'vuex'
-import { addITSpecialist } from '../../modules/db-service'
+import { addITSpecialist } from '../../modules/databaseManager/usersQueries'
 
 export default {
   name: 'Form',
   data: () => ({
     valid: false,
-    firstname: '',
-    lastname: '',
-    nameRules: [
-      v => !!v || 'Name is required',
-      v => v.length <= 10 || 'Name must be less than 10 characters'
-    ],
     email: '',
     emailRules: [
       v => !!v || 'E-mail is required',
@@ -84,14 +78,17 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
           () => {
-            this.updateUser({
-              email: this.email,
-              type: this.userType
-            })
-              addITSpecialist({
+            const collection = `${this.userType}s`
+            this.updateUser(
+              {
                 email: this.email
-              })
-            }
+              },
+              collection
+            )
+            addITSpecialist({
+              email: this.email,
+              collection: `${this.userType}s`
+            })
             self.$router.replace('profile')
           },
           function(err) {
@@ -107,7 +104,8 @@ export default {
         .then(
           () => {
             this.updateUser({
-              email: this.email
+              email: this.email,
+              type: this.userType
             })
             self.$router.replace('profile')
           },
