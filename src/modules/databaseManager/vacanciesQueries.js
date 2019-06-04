@@ -14,15 +14,17 @@ async function getVacancies() {
   for (let doc of vacanciesSnapShot.docs) {
     const companyId = doc.data().companyId
     const hrId = doc.data().hrManagerId
-    const company = await getCompanyInfo(companyId)
-    const hrManager = await getHrInfo(hrId)
+    const company = companyId ? await getCompanyInfo(companyId) : {}
+    const hrManager = hrId ? await getHrInfo(hrId) : {}
     vacancies.push({
+      id: doc.id,
       content: doc.data(),
       company,
       hrManager
     })
   }
   store.dispatch('updateVacancies', vacancies)
+  store.dispatch('initFilteredVacancies', vacancies)
 }
 
 export {

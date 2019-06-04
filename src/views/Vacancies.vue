@@ -19,5 +19,8 @@ export default {
 </script>
 
 <style scoped>
-
+.vacancies {
+  width: 100%;
+  height: 100%;
+}
 </style>

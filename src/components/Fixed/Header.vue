@@ -83,8 +83,13 @@
         round
         append
         color="white"
+        fab
+        small
         @click="$router.push('/profile')">
-        Профіль
+        <v-icon
+        color="#fff">
+          person
+        </v-icon>
       </v-btn>
     </div>
   </v-toolbar>
@@ -152,5 +157,14 @@ export default {
   display: flex;
   justify-content: flex-end;
   width: 100%;
+}
+.icon-button {
+  width: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  .header__logo{
+    display: none;
+  }
 }
 </style>

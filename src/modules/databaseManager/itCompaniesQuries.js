@@ -11,7 +11,7 @@ async function getCompanyInfo(companyId) {
 async function getHrInfo(companyId) {
   const hrSnapshot = db
     .collection('hr-managers')
-    .doc(companyId)con
+    .doc(companyId)
   const hrInfo = await hrSnapshot.get()
   return hrInfo.data()
 }

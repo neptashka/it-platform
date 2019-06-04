@@ -5,11 +5,28 @@
         <img :src="getImage" alt="" />
       </v-avatar>
     </div>
-    <div>
-      <p>{{ user.fullName }}</p>
+    <div class="profile__title profile__entity">
+      <span>{{ user.fullName }}</span>
     </div>
-    <v-btn class="profile__button">Редагувати профіль</v-btn>
-    <v-btn class="profile__button" @click="logout">Вийти</v-btn>
+    <div class="profile__progress">
+      <v-progress-linear height="15" value="60"></v-progress-linear>
+    </div>
+    <v-btn
+      flat
+      class="profile__button">
+      Професійні дані
+    </v-btn>
+    <v-btn
+      flat
+      class="profile__button">
+      Персональні дані
+    </v-btn>
+    <v-btn
+      flat
+      @click="logout"
+      class="profile__button">
+      Вийти
+    </v-btn>
   </div>
 </template>
 
@@ -24,9 +41,7 @@ export default {
   data() {
     return {}
   },
-  mixins: [
-    loadImageMixin
-  ],
+  mixins: [loadImageMixin],
   computed: {
     ...mapGetters(['user']),
     getImage() {
@@ -57,12 +72,40 @@ export default {
 }
 .profile__avatar {
   margin-top: 20px;
-  width: 100%;
   display: flex;
   justify-content: center;
+  border-radius: 100%;
+  border: 2px solid #4ad59e;
 }
 .profile__button {
   margin-bottom: 10px;
   width: 80%;
+}
+.profile__title {
+  font-size: 20px;
+  color: #707070;
+  font-weight: bold;
+}
+.profile__entity {
+  margin-top: 10px;
+}
+.profile__progress {
+  width: 80%;
+}
+</style>
+
+<style>
+.profile__progress .v-progress-linear__background {
+  background-image: linear-gradient(to top right, #54e38e, #41c7af);
+  border-radius: 15px;
+}
+.profile__progress .v-progress-linear__bar__determinate.primary {
+  background-color: #4ad59e !important;
+  border-color: #4ad59e !important;
+  border-radius: 15px;
+}
+.profile__button {
+  background-color: #EBEBEB;
+  border-radius: 8px;
 }
 </style>

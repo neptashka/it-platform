@@ -1,27 +1,35 @@
 <template>
-  <div class="vacancies">
-    <h1>Vacancies</h1>
+  <div class="vacancy-content">
+    <AsideFilterPanel></AsideFilterPanel>
+    <VacancyForm></VacancyForm>
   </div>
 </template>
 
 <script>
 import { getVacancies } from '../../modules/databaseManager/vacanciesQueries'
+import AsideFilterPanel from './AsideFilterPanel'
+import VacancyForm from './VacancyForm'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'VacancyContent',
-  mounted() {
-    getVacancies()
+  components: {
+    AsideFilterPanel,
+    VacancyForm
   },
   computed: {
-    ...mapGetters
+    ...mapGetters(['vacancies'])
+  },
+  beforeCreate() {
+    getVacancies()
   }
 }
 </script>
 
 <style scoped>
-.vacancies {
+.vacancy-content {
   width: 100%;
   height: 100%;
+  display: flex;
 }
 </style>
