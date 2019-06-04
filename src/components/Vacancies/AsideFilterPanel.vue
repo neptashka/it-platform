@@ -38,6 +38,7 @@
       </p>
       <div class="filter--header">
         <v-select
+          solo
           :items="yearsWorked"
         ></v-select>
       </div>

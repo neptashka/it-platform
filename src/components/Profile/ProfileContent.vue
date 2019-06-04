@@ -8,7 +8,7 @@
 <script>
 import LeftPanel from './LeftPanel'
 import PersonalInformation from './PersonalInformation'
-import { getCurrentUser } from '../../modules/databaseManager/usersQueries'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProfileContent',
@@ -16,8 +16,8 @@ export default {
     LeftPanel,
     PersonalInformation
   },
-  beforeCreate() {
-    getCurrentUser()
+  computed: {
+    ...mapGetters(['user'])
   }
 }
 </script>

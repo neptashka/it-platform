@@ -1,12 +1,39 @@
 <template>
-  <div class="personal-information">
-
+  <div
+    v-if="user"
+    class="personal-information">
+    <ItSpecialistProfile
+      v-if="isDev()">
+    </ItSpecialistProfile>
+    <HrProfile
+      v-if="isHr()">
+    </HrProfile>
   </div>
 </template>
 
 <script>
+import ItSpecialistProfile from '../ItSpecialist/ItSpecialistProfile'
+import HrProfile from '../HrManager/HrProfile'
+import { mapGetters } from 'vuex'
+import { HR_MANAGER, IT_SPECIALIST } from '../../constants/userTypes'
+
 export default {
-  name: 'PersonalInformation'
+  name: 'PersonalInformation',
+  components: {
+    ItSpecialistProfile,
+    HrProfile
+  },
+  methods: {
+    isDev() {
+      return this.user.type === IT_SPECIALIST
+    },
+    isHr() {
+      return this.user.type === HR_MANAGER
+    }
+  },
+  computed: {
+    ...mapGetters(['user'])
+  }
 }
 </script>
 

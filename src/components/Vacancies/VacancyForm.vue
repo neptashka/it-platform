@@ -35,22 +35,7 @@ export default {
     ...mapActions([
       'updateFilteredVacancies'
     ])
-  },
-  // mounted() {
-  //   //why?
-  //   getVacancies()
-  //   const filters = {
-  //     cities: this.citiesFilters,
-  //     languages: this.languagesFilters
-  //   }
-  //   console.log('VACANCIES FORM', this.vacancies)
-  //   const updatedVacancyParam = {
-  //     filters,
-  //     vacancies: this.vacancies
-  //   }
-  //   this.updateFilteredVacancies(updatedVacancyParam)
-  //   console.log('CREATED', this.filteredVacancies)
-  // }
+  }
 }
 </script>
 

@@ -44,7 +44,7 @@
 <script>
 import firebase from 'firebase'
 import { mapGetters, mapActions } from 'vuex'
-import { addITSpecialist } from '../../modules/databaseManager/usersQueries'
+import { addTypeUser, getUserByEmail } from '../../modules/databaseManager/usersQueries'
 
 export default {
   name: 'Form',
@@ -79,16 +79,15 @@ export default {
         .then(
           () => {
             const collection = `${this.userType}s`
-            this.updateUser(
-              {
+            this.updateUser({
+              email: this.email,
+              type: this.userType
+            })
+            addTypeUser({
                 email: this.email
               },
               collection
             )
-            addITSpecialist({
-              email: this.email,
-              collection: `${this.userType}s`
-            })
             self.$router.replace('profile')
           },
           function(err) {
@@ -103,10 +102,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           () => {
-            this.updateUser({
-              email: this.email,
-              type: this.userType
-            })
+            getUserByEmail(this.email)
             self.$router.replace('profile')
           },
           err => alert(err.message)

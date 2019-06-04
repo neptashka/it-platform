@@ -1,5 +1,5 @@
 <template>
-  $END$
+  <h1>hrLeftPanel</h1>
 </template>
 
 <script>
