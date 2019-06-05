@@ -13,6 +13,10 @@ export default {
     state.vacancies = vacancies
   },
   [UPDATE_FILTERED_VACANCIES](state, { filters, vacancies }) {
+    console.log('VACANCIES', vacancies)
+    console.log('FILTERS', filters)
+    // const languages = filters.languages
+    // const cities = filters.cities
     if ((isEmptyObject(filters.cities) && isEmptyObject(filters.languages))
       || (allFalseValues(filters.cities) && allFalseValues(filters.languages))){
       state.filteredVacancies = vacancies

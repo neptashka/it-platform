@@ -57,7 +57,7 @@ export default {
 }
 .vacancy-form {
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   overflow-y: auto;
   background-color: #fff;
   display: flex;

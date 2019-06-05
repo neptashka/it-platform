@@ -1,7 +1,7 @@
 <template>
   <div class="vacancy-form">
     <div
-      v-for="(vacancy, index) in filteredVacancies"
+      v-for="(vacancy, index) in vacancies"
       class="announcement">
       <Form :vacancy="vacancy" :color="cardColors[index]"></Form>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import Form from '../Common/Form'
 import { colors } from '../../constants/vacanciesColors'
 
@@ -30,11 +30,6 @@ export default {
       'citiesFilters',
       'languagesFilters'
     ])
-  },
-  methods: {
-    ...mapActions([
-      'updateFilteredVacancies'
-    ])
   }
 }
 </script>
@@ -42,7 +37,7 @@ export default {
 <style scoped>
 .vacancy-form {
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   overflow-y: auto;
   background-color: #fff;
   display: flex;

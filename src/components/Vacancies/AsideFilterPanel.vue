@@ -32,12 +32,13 @@
         </div>
       </div>
     </div>
-    <div class="filter__section">
+    <div class="filter__section-last">
       <p class="filter--header">
         Досвід роботи
       </p>
       <div class="filter--header">
         <v-select
+          v-model="experience"
           outline
           :items="yearsWorked"
         ></v-select>
@@ -58,7 +59,10 @@ export default {
     return {
       programLanguages: languages,
       citiesToWork: cities,
-      yearsWorked: jobExperience
+      yearsWorked: jobExperience,
+      experience: null,
+      citiesFilters: {},
+      languagesFilters: {}
     }
   },
   methods: {
@@ -83,7 +87,8 @@ export default {
     updateFilters() {
       const filters = {
         cities: this.citiesFilters,
-        languages: this.languagesFilters
+        languages: this.languagesFilters,
+        jobExperience:this.experience
       }
       this.updateFilteredVacancies({
         filters,
@@ -91,17 +96,18 @@ export default {
       })
     },
     ...mapActions([
-      'updateLanguagesFilters',
-      'updateCitiesFilters',
       'updateFilteredVacancies'
     ])
   },
   computed: {
     ...mapGetters([
-      'citiesFilters',
-      'languagesFilters',
       'vacancies'
     ])
+  },
+  watch: {
+    experience(value) {
+      this.updateFilters()
+    }
   }
 }
 </script>
@@ -152,7 +158,7 @@ export default {
   background-color: #e6e6e6;
 }
 .aside-filter-panel {
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   overflow-y: auto;
 }
 .aside-filter-panel::-webkit-scrollbar {
@@ -167,5 +173,10 @@ export default {
 }
 .aside-filter-panel::-webkit-scrollbar-thumb:hover {
   background: #d5d5d5;
+}
+.filter__section-last {
+  margin-top: 20px;
+  width: 80%;
+  padding-bottom: 20px;
 }
 </style>

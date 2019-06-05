@@ -28,16 +28,14 @@
         </div>
       </div>
     </div>
-    <div class="filter__section">
+    <div class="filter__section-last">
       <p class="filter--header">
         Досвід роботи
       </p>
-      <div class="filter--header">
-        <v-select
-            outline
-            :items="yearsWorked"
-        ></v-select>
-      </div>
+      <v-select
+          outline
+          :items="yearsWorked"
+      ></v-select>
     </div>
   </div>
 </template>a
@@ -78,6 +76,11 @@ export default {
   border-bottom: 1px solid #707070;
   padding-bottom: 20px;
 }
+.filter__section-last {
+  margin-top: 20px;
+  width: 80%;
+  padding-bottom: 20px;
+}
 .filter--header {
   font-size: 20px;
   color: #000;
@@ -109,7 +112,7 @@ export default {
   background-color: #e6e6e6;
 }
 .aside-filter-panel {
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   overflow-y: auto;
 }
 .aside-filter-panel::-webkit-scrollbar {

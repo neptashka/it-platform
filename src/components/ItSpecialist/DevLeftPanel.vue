@@ -17,7 +17,7 @@
       flat
       @click="sendRequest"
       :disabled="profile !== 100 || requestSent"
-      class="profile__button green-button ">
+      class="profile__button">
       Надіслати дані
     </v-btn>
     <v-btn

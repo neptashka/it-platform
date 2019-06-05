@@ -16,7 +16,7 @@
           </span>
         </div>
         <p class="form--text form__requirmentes">
-          {{ vacancy.content.requirments }}
+          {{ vacancy.content.requirements }}
         </p>
       </div>
     </div>
@@ -45,6 +45,13 @@
           Обрати
         </v-btn>
       </div>
+      <ConfirmWindowModal
+        :vacancy="vacancy"
+        title="Обрати вакансію"
+        text="Ви справді бажаєте надіслати свої контактні дані на цю вакансію?"
+        :visible="showModal"
+        @close="showModal = false">
+      </ConfirmWindowModal>
     </div>
   </v-card>
 </template>
@@ -52,6 +59,7 @@
 <script>
 import { IT_SPECIALIST } from '../../constants/userTypes'
 import { mapGetters } from 'vuex'
+import ConfirmWindowModal from '../Common/ConfirmWindow'
 
 export default {
   name: 'Form',
@@ -63,6 +71,14 @@ export default {
       hrManager: Object,
       id: String
     }
+  },
+  data() {
+    return {
+      showModal: false
+    }
+  },
+  components: {
+    ConfirmWindowModal
   },
   computed: {
     ...mapGetters(['user', 'profile'])
@@ -80,6 +96,7 @@ export default {
           duration: 3000
         })
       }
+      this.showModal = true
     }
   }
 }

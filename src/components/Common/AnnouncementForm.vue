@@ -35,7 +35,7 @@
           Видалити
         </v-btn>
         <v-btn
-          v-else
+          v-if="isHr()"
           dark
           small
           flat
@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import { HR_MANAGER } from '../../constants/userTypes'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AnnouncementForm',
   props: {
@@ -62,6 +65,14 @@ export default {
     },
     shouldDelete: Boolean,
     color: String
+  },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  methods: {
+    isHr() {
+      return this.user.type === HR_MANAGER
+    }
   }
 }
 </script>

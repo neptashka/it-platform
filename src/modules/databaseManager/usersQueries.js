@@ -2,6 +2,7 @@ import { db } from '../../main'
 import store from '../../store'
 import { IT_SPECIALIST, HR_MANAGER } from '../../constants/userTypes'
 import { isRequestSent } from './profileQueries'
+import { getContacts } from './contactsQueries'
 
 /**
  * @function addUser - adds user to collection 'users
@@ -11,7 +12,6 @@ const addUser = function(user) {
   db.collection('users')
     .add(user)
     .then(function(docRef) {
-      alert(`User was added`)
     })
     .catch(function(error) {
       alert(`Error ${error}`)
@@ -60,6 +60,7 @@ async function getUserByEmail(email) {
       isRequestSent(user.userId)
     } else if (user && user.type === HR_MANAGER) {
       getHrManager(user.userId)
+      getContacts(user.userId)
     }
   }
 }
