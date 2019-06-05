@@ -1,5 +1,5 @@
 <template>
-  <div class="dev-profile">
+  <div v-if="user" class="dev-profile">
     <div class="dev-profile__container">
       <div class="dev-profile__header">
         <p class="dev-profile__header--text">
@@ -7,25 +7,31 @@
         </p>
       </div>
       <v-alert
+        v-if="!personalData"
         class="alert"
         v-model="personalDataALert"
         dismissible
         type="warning">
-        Ви не заповнили контактні дані. Для натисніть кнопку "Контактні дані" та заповніть всі поля.
+        Ви не заповнили контактні дані. Для цього натисніть кнопку "Контактні дані" та заповніть всі поля.
       </v-alert>
       <v-alert
+        v-if="!jobData"
         class="alert"
         v-model="jobDataAlert"
         dismissible
         type="warning">
-        Ви  не заповнили професійні дані. Для натисніть кнопку "Профейсійні дані" та заповніть всі поля.
+        Ви не заповнили професійні дані. Для цього натисніть кнопку "Профейсійні дані" та заповніть всі поля.
       </v-alert>
+      <div v-if="requestSent">
+        <EmployeeAnnouncement></EmployeeAnnouncement>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import EmployeeAnnouncement from '../Empoyee/EmployeeAnnouncement'
 export default {
   name: 'ItSpecialistProfile',
   data() {
@@ -34,10 +40,15 @@ export default {
       jobDataAlert: !this.jobData
     }
   },
+  components: {
+    EmployeeAnnouncement
+  },
   computed: {
     ...mapGetters([
       'jobData',
-      'personalData'
+      'personalData',
+      'requestSent',
+      'user'
     ])
   }
 }

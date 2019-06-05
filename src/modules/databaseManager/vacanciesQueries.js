@@ -27,6 +27,19 @@ async function getVacancies() {
   store.dispatch('initFilteredVacancies', vacancies)
 }
 
+async function getRequests() {
+  const vacanciesSnapShot = await db
+    .collection('employee-list')
+    .get()
+  let vacancies = []
+  for (let doc of vacanciesSnapShot.docs) {
+    vacancies.push(doc.data())
+  }
+  store.dispatch('updateRequests', vacancies)
+  store.dispatch('initFilteredRequests', vacancies)
+}
+
 export {
-  getVacancies
+  getVacancies,
+  getRequests
 }

@@ -3,7 +3,8 @@ import {
   UPDATE_USER,
   UPDATE_USER_TYPE,
   UPDATE_IT_SPECIALIST,
-  UPDATE_HR_MANAGER
+  UPDATE_HR_MANAGER,
+  UPDATE_DEV_IMAGE
 } from './constants'
 
 const userManager = {
@@ -40,6 +41,9 @@ const userManager = {
     },
     updateHrManager(store, user) {
       store.commit(UPDATE_HR_MANAGER, user)
+    },
+    updateDevImage(store, image) {
+      store.commit(UPDATE_DEV_IMAGE, image)
     }
   }
 }

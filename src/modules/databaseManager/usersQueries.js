@@ -1,12 +1,13 @@
 import { db } from '../../main'
 import store from '../../store'
 import { IT_SPECIALIST, HR_MANAGER } from '../../constants/userTypes'
+import { isRequestSent } from './profileQueries'
 
 /**
  * @function addUser - adds user to collection 'users
  * @param {Object} user, property is email
  */
-const addUser = function (user) {
+const addUser = function(user) {
   db.collection('users')
     .add(user)
     .then(function(docRef) {
@@ -22,7 +23,7 @@ const addUser = function (user) {
  * @param {Object} user
  * @param {String} collection
  */
-const addTypeUser = function(user, collection){
+const addTypeUser = function(user, collection) {
   db.collection(collection)
     .add(user)
     .then(function(docRef) {
@@ -56,6 +57,7 @@ async function getUserByEmail(email) {
     store.dispatch('updateUser', user)
     if (user && user.type === IT_SPECIALIST) {
       getItSpecialist(user.userId)
+      isRequestSent(user.userId)
     } else if (user && user.type === HR_MANAGER) {
       getHrManager(user.userId)
     }
@@ -63,9 +65,7 @@ async function getUserByEmail(email) {
 }
 
 async function getItSpecialist(id) {
-  const docRef = db
-    .collection('it-specialists')
-    .doc(id)
+  const docRef = db.collection('it-specialists').doc(id)
   docRef
     .get()
     .then(function(doc) {
@@ -79,9 +79,7 @@ async function getItSpecialist(id) {
 }
 
 async function getHrManager(id) {
-  const docRef = db
-    .collection('hr-managers')
-    .doc(id)
+  const docRef = db.collection('hr-managers').doc(id)
   docRef
     .get()
     .then(function(doc) {

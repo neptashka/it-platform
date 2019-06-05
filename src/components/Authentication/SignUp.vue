@@ -3,11 +3,14 @@
     class="authentication">
     <div class="authentication__buttons">
       <v-btn
+        class="green-button button-round-white"
         :disabled="!userIsHr"
         @click="chooseDevType()">
         ІТ-спеціаліст
       </v-btn>
+      <h1>/</h1>
       <v-btn
+        class="green-button button-round-white"
         :disabled="userIsHr"
         @click="chooseHrType()">
         HR-менеджер
@@ -99,6 +102,7 @@ export default {
   justify-content: flex-start;
 }
 .authentication__buttons {
+  margin-top: 100px;
   display: flex;
   flex-direction: row;
 }

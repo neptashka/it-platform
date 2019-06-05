@@ -6,6 +6,9 @@ import store from './store/index'
 import firebase from 'firebase'
 import 'firebase/firestore'
 import firebaseConfig from './config/firebase'
+import Toasted from 'vue-toasted'
+
+Vue.use(Toasted)
 
 Vue.config.productionTip = false
 

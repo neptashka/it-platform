@@ -40,7 +40,6 @@ export const jobExperienceMap = {
 }
 
 export const jobExperience = [
-  'Не обирати',
   'Менше року',
   '1 рік',
   '2 роки',

@@ -1,62 +1,63 @@
 <template>
-  <v-dialog
-    v-model="show"
-    persistent
-    height="80%"
-    width="60%">
+  <v-dialog v-model="show" persistent max-width="850">
     <v-card>
-      <v-card-title class="form-title__container">
-        <span
-          class="job-form__header">
+      <v-card-title class="form-title__container pa-1">
+        <v-spacer />
+        <span class="job-form__header">
           Професійні дані
         </span>
+        <v-spacer />
         <v-btn
           flat
           fab
+          small
           color="#4AD59E"
           @click.stop="show = false"
-          class="form-title__icon-close">
+          class="form-title__icon-close"
+        >
           <v-icon>
             close
           </v-icon>
         </v-btn>
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="pa-1">
         <v-form
           ref="form"
           lazy-validation
+          :rules="jobNameRule"
           v-model="validForm"
-          class="job-form">
+          class="job-form"
+        >
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex
-                align-self-center
-                xs2>
-                <label
-                  class="job-form__label">
+              <v-flex align-self-center xs2 mt-1>
+                <label class="job-form__label">
                   Вакансія
                 </label>
               </v-flex>
-              <v-flex xs10>
+              <v-flex xs10 my-2 class="job-form__field">
                 <v-text-field
+                  v-model="form.title"
+                  :rules="jobNameRule"
                   required
-                  rows="2"
                   color="#4AD59E"
                   single-line
-                  outline>
+                  outline
+                  height="50"
+                  clearable
+                >
                 </v-text-field>
               </v-flex>
-              <v-flex align-self-center xs2>
-                <label
-                  class="job-form__label">
+              <v-flex align-self-center xs2 my-2>
+                <label class="job-form__label">
                   Навички
                 </label>
               </v-flex>
-              <v-flex xs10>
+              <v-flex xs10 mt-2>
                 <v-select
-                  rows="2"
-                  v-model="skillsModel"
+                  v-model="form.languages"
                   color="#4AD59E"
+                  :rules="jobArrayRule"
                   :items="languageArray"
                   deletable-chips
                   chips
@@ -64,28 +65,43 @@
                   outline
                 ></v-select>
               </v-flex>
-              <v-flex align-self-center xs2>
-                <label
-                  class="job-form__label">
+              <v-flex align-self-center xs2 mt-1 mb-4>
+                <label class="job-form__label">
                   Досвід роботи
                 </label>
               </v-flex>
               <v-flex xs10>
                 <v-select
-                  v-model="experienceModel"
+                  v-model="form.experience"
                   color="#4AD59E"
+                  :rules="jobNameRule"
                   :items="jobArray"
                   outline
                 ></v-select>
-              </v-flex>
-              <v-flex align-self-center xs2>
-                <label
-                  class="job-form__label">
-                  Детально про досвід роботи
+              </v-flex >
+              <v-flex align-self-center xs2 mt-1 mb-4>
+                <label class="job-form__label">
+                  Місто
                 </label>
               </v-flex>
               <v-flex xs10>
+                <v-select
+                  v-model="form.city"
+                  color="#4AD59E"
+                  :rules="jobArrayRule"
+                  :items="citiesArray"
+                  outline
+                ></v-select>
+              </v-flex>
+              <v-flex align-self-center xs2 mb-5>
+                <label class="job-form__label">
+                  Детально про досвід роботи
+                </label>
+              </v-flex>
+              <v-flex xs10 mt-2>
                 <v-textarea
+                  :rules="jobNameRule"
+                  v-model="form.description"
                   outline
                   name="input-7-4"
                 ></v-textarea>
@@ -94,11 +110,15 @@
           </v-container>
         </v-form>
       </v-card-text>
-      <v-card-actions class="form__buttons">
+      <v-card-actions class="form__buttons pt-0">
         <v-btn
-          class="green-button"
-          flat>
-          Надіслати
+          @click="saveProfData"
+          :disabled="!validForm"
+          class="green-button button-round-white"
+          flat
+          round
+        >
+          Зберегти
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -106,18 +126,27 @@
 </template>
 
 <script>
-import { languages, jobExperience } from '../../constants/filters'
+import { languages, jobExperience, cities } from '../../constants/filters'
+import { mapGetters, mapActions } from 'vuex'
+import { addJobData } from '../../modules/databaseManager/profileQueries'
 
 export default {
   name: 'JobDataModel',
   props: ['visible'],
   data() {
     return {
-      skillsModel: null,
-      experienceModel: null,
       languageArray: languages,
       jobArray: jobExperience,
-      validForm: false
+      citiesArray: cities,
+      validForm: false,
+      form: {
+        title: '',
+        languages: [],
+        experience: '',
+        description: ''
+      },
+      jobNameRule: [v => !!v || `Це поле є обов'язковим`],
+      jobArrayRule: [v => (!!v && v.length > 0) || `Це поле є обов'язковим`]
     }
   },
   computed: {
@@ -130,6 +159,24 @@ export default {
           this.$emit('close')
         }
       }
+    },
+    ...mapGetters(['user', 'jobData'])
+  },
+  methods: {
+    ...mapActions(['updateJobData']),
+    saveProfData() {
+      const profData = {
+        ...this.form,
+        itSpecialistId: this.user.userId
+      }
+      addJobData(profData)
+      this.$toasted.show(`Інформація збережена`, {
+        theme: 'toasted-primary',
+        type: 'success',
+        position: 'top-center',
+        duration: 3000
+      })
+      this.show = false
     }
   }
 }
@@ -142,11 +189,13 @@ export default {
 .job-form .container {
   padding: 0 50px 0 50px !important;
 }
-.job-form .v-text-field--box input, .v-text-field--full-width input, .v-text-f{
+.job-form .v-text-field--box input,
+.v-text-field--full-width input,
+.v-text-f {
   margin-top: 0 !important;
 }
 .job-form .theme--light.v-chip {
-  background-color: #4AD59E;
+  background-color: #4ad59e;
   color: #fff;
 }
 .job-form__label {
@@ -166,13 +215,27 @@ export default {
 .hob-form .v-text-field.v-text-field--enclosed .v-text-field__details {
   margin-bottom: 0 !important;
 }
-.form-title__container{
+.form-title__container {
   display: flex;
 }
-.form-title__icon-close {
-  transform: translate(330px, 0);
+
+/* Text Input styles*/
+.v-text-field--box .v-input__slot,
+.v-text-field--outline .v-input__slot {
+  min-height: 26px !important;
 }
-.job-form__header {
-  transform: translate(60px, 0);
+.v-input__control {
+  min-height: 50px;
+}
+.job-form__field {
+  height: 68px;
+}
+/* Select input styles*/
+.v-select__selections {
+  padding-top: 10px !important;
+  min-height: 50px !important;
+}
+.v-select .v-input__slot {
+  margin-bottom: 0;
 }
 </style>

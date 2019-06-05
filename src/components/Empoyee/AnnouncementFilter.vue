@@ -6,11 +6,9 @@
       </p>
       <div class="filter__chips">
         <div
-          v-for="language in programLanguages">
-          <div
-            class="chip"
-            :class="chooseClassForLang(language)"
-            @click="selectedLang(language)">
+          v-for="(language, index) in programLanguages"
+          :key="index">
+          <div class="chip">
             {{ language }}
           </div>
         </div>
@@ -22,11 +20,9 @@
       </p>
       <div class="filter__chips">
         <div
-          v-for="city in citiesToWork">
+            v-for="city in citiesToWork">
           <div
-            class="chip"
-            :class="chooseClassForCity(city)"
-            @click="selectedCity(city)">
+            class="chip">
             {{ city }}
           </div>
         </div>
@@ -38,75 +34,35 @@
       </p>
       <div class="filter--header">
         <v-select
-          outline
-          :items="yearsWorked"
+            outline
+            :items="yearsWorked"
         ></v-select>
       </div>
     </div>
   </div>
-</template>
+</template>a
 
 <script>
 import { languages, cities } from '../../constants/filters'
-import { mapGetters, mapActions } from 'vuex'
-import { jobExperience } from '../../constants/filters'
-import Vue from 'vue'
+import {jobExperience} from '../../constants/filters'
 
 export default {
-  name: 'AsideFilterPanel',
+  name: 'AnnouncementFilter',
   data() {
     return {
       programLanguages: languages,
       citiesToWork: cities,
       yearsWorked: jobExperience
     }
-  },
-  methods: {
-    chooseClassForLang(element) {
-      return this.languagesFilters[element]
-        ? 'active-class'
-        : 'passive-class'
-    },
-    selectedLang(element) {
-      Vue.set(this.languagesFilters, element, !this.languagesFilters[element])
-      this.updateFilters()
-    },
-    chooseClassForCity(element) {
-      return this.citiesFilters[element]
-        ? 'active-class'
-        : 'passive-class'
-    },
-    selectedCity(element) {
-      Vue.set(this.citiesFilters, element, !this.citiesFilters[element])
-      this.updateFilters()
-    },
-    updateFilters() {
-      const filters = {
-        cities: this.citiesFilters,
-        languages: this.languagesFilters
-      }
-      this.updateFilteredVacancies({
-        filters,
-        vacancies: this.vacancies
-      })
-    },
-    ...mapActions([
-      'updateLanguagesFilters',
-      'updateCitiesFilters',
-      'updateFilteredVacancies'
-    ])
-  },
-  computed: {
-    ...mapGetters([
-      'citiesFilters',
-      'languagesFilters',
-      'vacancies'
-    ])
   }
 }
 </script>
 
 <style scoped>
+.container-filters {
+  height: 100%;
+  background-color: red;
+}
 .aside-filter-panel {
   width: 500px;
   height: 100%;
@@ -144,6 +100,7 @@ export default {
   align-items: center;
   justify-content: center;
   min-width: 50px;
+  background-color: #e6e6e6;
 }
 .active-class {
   background-image: linear-gradient(to top right, #54e38e, #41c7af);

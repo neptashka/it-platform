@@ -30,18 +30,19 @@
         </span>
       </div>
       <div class="form__button-container">
-        <v-icon
-          color="#fff"
-          class="visible-icon">
-          visibility
+        <v-icon v-if="isItSpecialist()" color="#fff" class="visible-icon">
+          done
         </v-icon>
         <v-btn
           dark
           small
           flat
+          @click="sendContacts"
+          v-if="isItSpecialist()"
           color="#000"
-          class="form__view-button">
-          Переглянути
+          class="form__view-button"
+        >
+          Обрати
         </v-btn>
       </div>
     </div>
@@ -49,6 +50,9 @@
 </template>
 
 <script>
+import { IT_SPECIALIST } from '../../constants/userTypes'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Form',
   props: {
@@ -58,6 +62,24 @@ export default {
       content: Object,
       hrManager: Object,
       id: String
+    }
+  },
+  computed: {
+    ...mapGetters(['user', 'profile'])
+  },
+  methods: {
+    isItSpecialist() {
+      return this.user.type === IT_SPECIALIST
+    },
+    sendContacts() {
+      if(this.profile !== 100) {
+        this.$toasted.show('Профіль не заповнений на 100%!', {
+          theme: 'toasted-primary',
+          type: 'warning',
+          position: 'top-center',
+          duration: 3000
+        })
+      }
     }
   }
 }

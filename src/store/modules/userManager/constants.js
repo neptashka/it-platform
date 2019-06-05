@@ -5,3 +5,5 @@ export const UPDATE_USER_TYPE = 'updateUserType'
 export const UPDATE_IT_SPECIALIST = 'updateItSpecialist'
 
 export const UPDATE_HR_MANAGER = 'updateHrManager'
+
+export const UPDATE_DEV_IMAGE = 'updateDevImage'
