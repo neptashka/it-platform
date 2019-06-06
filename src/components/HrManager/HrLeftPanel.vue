@@ -1,8 +1,7 @@
 <template>
   <div v-if="hrManager" class="left-panel">
     <div class="profile__avatar">
-      <v-avatar
-        size="100">
+      <v-avatar size="100">
         <img :src="getImage()" alt="" />
       </v-avatar>
     </div>
@@ -12,20 +11,30 @@
     <div class="profile__progress">
       <v-progress-linear :value="hrProgress" height="15"></v-progress-linear>
     </div>
-    <v-btn
-      flat
-      class="profile__button">
+    <v-btn @click.stop = "showPersonalDataModal = true" flat class="profile__button" :disabled="hrProgress < 60">
       Створити вакансію
     </v-btn>
+    <AddVacancy
+      :visible="showPersonalDataModal"
+      @close="showPersonalDataModal = false"
+    >
+    </AddVacancy>
     <v-btn
+      @click="sendContacts"
       flat
-      class="profile__button">
-      ІТ-компанія
+      class="profile__button"
+      :disabled="hrProgress >= 60"
+    >
+      Існуючі ІТ-компанії
     </v-btn>
-    <v-btn
-      flat
-      @click="logout"
-      class="profile__button">
+    <ExistingJob
+      :visible="showJobModal"
+      @close="showJobModal = false"
+    ></ExistingJob>
+    <v-btn flat class="profile__button" :disabled="hrProgress >= 60">
+      Створити ІТ-компанію
+    </v-btn>
+    <v-btn flat @click="logout" class="profile__button">
       Вийти
     </v-btn>
   </div>
@@ -35,17 +44,20 @@
 import { mapGetters } from 'vuex'
 import loadImageMixin from '../../mixins/loadImage'
 import firebase from 'firebase'
+import ExistingJob from '../modals/ExistingJob'
+import AddVacancy from '../modals/AddVacancy'
 
 const noAvatar = 'images/profile/no-avatar.svg'
 export default {
   name: 'HrLeftPanel',
-  computed: {
-    ...mapGetters(['hrManager'])
-  },
   data() {
     return {
-      hrProgress: 0
+      showJobModal: false,
+      showPersonalDataModal: false
     }
+  },
+  computed: {
+    ...mapGetters(['hrManager', 'hrProgress'])
   },
   mixins: [loadImageMixin],
   methods: {
@@ -59,11 +71,16 @@ export default {
         .then(() => {
           this.$router.replace('login')
         })
+    },
+    sendContacts() {
+      this.showJobModal = true
     }
+  },
+  components: {
+    ExistingJob,
+    AddVacancy
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

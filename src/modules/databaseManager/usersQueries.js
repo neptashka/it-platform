@@ -3,6 +3,7 @@ import store from '../../store'
 import { IT_SPECIALIST, HR_MANAGER } from '../../constants/userTypes'
 import { isRequestSent } from './profileQueries'
 import { getContacts } from './contactsQueries'
+import { getItCompanies } from './hrManagerQueries'
 
 /**
  * @function addUser - adds user to collection 'users
@@ -11,8 +12,7 @@ import { getContacts } from './contactsQueries'
 const addUser = function(user) {
   db.collection('users')
     .add(user)
-    .then(function(docRef) {
-    })
+    .then(function(docRef) {})
     .catch(function(error) {
       alert(`Error ${error}`)
     })
@@ -61,6 +61,7 @@ async function getUserByEmail(email) {
     } else if (user && user.type === HR_MANAGER) {
       getHrManager(user.userId)
       getContacts(user.userId)
+      getItCompanies()
     }
   }
 }

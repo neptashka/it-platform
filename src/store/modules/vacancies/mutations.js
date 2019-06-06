@@ -32,14 +32,12 @@ export default {
       } else {
         filteredLanguages = vacancies.filter(vacancy => {
           let results = []
-          console.log(vacancy.content.languages)
           const array = vacancy.content.languages
           Array.prototype.forEach.call(array, lang => {
             if (languages[lang]) {
               results.push(lang)
             }
           })
-          console.log(results.length > 0)
           return results.length > 0
         })
         if (filteredLanguages.length === 0) {

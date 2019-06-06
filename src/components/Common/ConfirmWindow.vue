@@ -5,18 +5,20 @@
       <v-card-text>{{ text }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" flat @click.stop="dialog = false">Ні</v-btn>
-        <v-btn color="green darken-1"  flat @click.stop="sendData">Так</v-btn>
+        <v-btn color="green darken-1" flat @click.stop="dialog = false"
+          >Ні</v-btn
+        >
+        <v-btn color="green darken-1" flat @click.stop="sendData">Так</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { sendContacts } from '../../modules/databaseManager/contactsQueries'
+import { mapGetters } from 'vuex'
+import { sendContacts } from '../../modules/databaseManager/contactsQueries'
 
-  export default {
+export default {
   name: 'ConfirmWindow',
   props: {
     vacancy: Object,
@@ -48,6 +50,4 @@
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,10 +1,12 @@
 import mutations from './mutations'
-import { UPDATE_HR_CONTACT, UPDATE_HR_PROGRESS } from './constants'
+import { UPDATE_HR_CONTACT, UPDATE_HR_PROGRESS, UPDATE_IT_COMPANIES, UDPATE_SELECTED_IT_COMPANY } from './constants'
 
 const hrManager = {
   state: {
     hrContact: null,
-    hrProgress: 0
+    hrProgress: 20,
+    itCompanies: [],
+    selectedItCompany: null
   },
   getters: {
     hrContact(state) {
@@ -12,6 +14,12 @@ const hrManager = {
     },
     hrProgress(state) {
       return state.hrProgress
+    },
+	  itCompanies(state) {
+      return state.itCompanies
+    },
+    selectedItCompany(state) {
+      return state.selectedItCompany
     }
   },
   mutations,
@@ -21,6 +29,12 @@ const hrManager = {
     },
     updateHrProgress(store, data) {
       store.commit(UPDATE_HR_PROGRESS, data)
+    },
+    updateItCompanies(store, data) {
+      store.commit(UPDATE_IT_COMPANIES, data)
+    },
+	  updateSelectedItCompany(store, data) {
+      store.commit(UDPATE_SELECTED_IT_COMPANY, data)
     }
   }
 }

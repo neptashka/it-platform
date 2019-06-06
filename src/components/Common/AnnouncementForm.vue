@@ -138,6 +138,7 @@ export default {
   width: 100%;
 }
 .active-chip {
-  background-image: linear-gradient(to top right, #54e38e, #41c7af);
+  background-color: white;
+  opacity: 0.8;
 }
 </style>
