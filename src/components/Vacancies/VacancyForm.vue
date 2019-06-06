@@ -1,7 +1,7 @@
 <template>
   <div class="vacancy-form">
     <div
-      v-for="(vacancy, index) in vacancies"
+      v-for="(vacancy, index) in filteredVacancies"
       class="announcement">
       <Form :vacancy="vacancy" :color="cardColors[index]"></Form>
     </div>
@@ -37,7 +37,7 @@ export default {
 <style scoped>
 .vacancy-form {
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100vh - 60px);
   overflow-y: auto;
   background-color: #fff;
   display: flex;
