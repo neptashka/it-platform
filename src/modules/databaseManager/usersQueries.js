@@ -12,7 +12,7 @@ import { getItCompanies } from './hrManagerQueries'
 const addUser = function(user) {
   db.collection('users')
     .add(user)
-    .then(function(docRef) {})
+    .then(function() {})
     .catch(function(error) {
       alert(`Error ${error}`)
     })
@@ -27,9 +27,25 @@ const addTypeUser = function(user, collection) {
   db.collection(collection)
     .add(user)
     .then(function(docRef) {
+      const userType = collection.slice(0, collection.length - 1)
       addUser({
         email: user.email,
-        type: collection.slice(0, collection.length - 1),
+        type: userType,
+        userId: docRef.id
+      })
+      if (userType === IT_SPECIALIST) {
+        store.dispatch('updateItSpecialist', {
+          email: user.email
+        })
+      } else {
+        getItCompanies()
+        store.dispatch('updateHrManager', {
+          email: user.email
+        })
+      }
+      store.dispatch('updateUser', {
+        email: user.email,
+        type: collection.slice(0, collection.length-1),
         userId: docRef.id
       })
     })
@@ -94,4 +110,19 @@ async function getHrManager(id) {
     })
 }
 
-export { getUserByEmail, addTypeUser, addUser }
+async function getUserTypebyEmail(email) {
+  const usersSnapShot = await db
+    .collection('users')
+    .where('email', '==', email)
+    .get()
+  let users = []
+  for (let doc of usersSnapShot.docs) {
+    users.push(doc.data())
+  }
+  if (users.length > 0) {
+    const user = users[0]
+    return user.type
+  }
+}
+
+export { getUserByEmail, addTypeUser, addUser, getUserTypebyEmail }

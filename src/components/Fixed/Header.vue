@@ -1,25 +1,13 @@
 <template>
-  <v-toolbar
-    app
-    flat
-    height="60"
-    :color="headerColor">
+  <v-toolbar app flat height="60" :color="headerColor">
     <img
       class="header__logo"
       src="../../../src/images/logos/main-logo.svg"
       alt="Logo"
       @click="homeClick"
     />
-    <div
-      class="header__buttons"
-      v-if="isHomePage">
-      <v-btn
-        flat
-        round
-        append
-        color="white"
-        @click="$router.push('/login')"
-      >
+    <div class="header__buttons" v-if="isHomePage">
+      <v-btn flat round append color="white" @click="$router.push('/login')">
         Вхід
       </v-btn>
       <v-btn
@@ -28,17 +16,13 @@
         append
         outline
         color="white"
-        @click="$router.push('/register')">
+        @click="$router.push('/register')"
+      >
         Реєстрація
       </v-btn>
     </div>
     <div class="header__buttons" v-if="isRegisterPage">
-      <v-btn
-        flat
-        round
-        append
-        color="white"
-        @click="$router.push('/login')">
+      <v-btn flat round append color="white" @click="$router.push('/login')">
         Вхід
       </v-btn>
     </div>
@@ -49,17 +33,19 @@
         append
         outline
         color="white"
-        @click="$router.replace('/register')">
+        @click="$router.replace('/register')"
+      >
         Реєстрація
       </v-btn>
     </div>
-    <div class="header__buttons" v-if="isRegistered">
+    <div class="header__buttons" v-if="isRegisteredUser">
       <v-btn
         flat
         round
         append
         color="white"
-        @click="$router.replace('/it-companies')">
+        @click="$router.replace('/it-companies')"
+      >
         ІТ-компанії
       </v-btn>
       <v-btn
@@ -67,7 +53,8 @@
         round
         append
         color="white"
-        @click="$router.replace('/it-specialists')">
+        @click="$router.replace('/it-specialists')"
+      >
         ІТ-спеціалісти
       </v-btn>
       <v-btn
@@ -75,7 +62,8 @@
         round
         append
         color="white"
-        @click="$router.replace('/vacancies')">
+        @click="$router.replace('/vacancies')"
+      >
         Вакансії
       </v-btn>
       <v-btn
@@ -85,9 +73,9 @@
         color="white"
         fab
         small
-        @click="$router.push('/profile')">
-        <v-icon
-        color="#fff">
+        @click="$router.push('/profile')"
+      >
+        <v-icon color="#fff">
           person
         </v-icon>
       </v-btn>
@@ -106,7 +94,8 @@ export default {
   name: 'Header',
   data() {
     return {
-      authorizedUser: false
+      authorizedUser: false,
+      isRegisteredUser: false
     }
   },
   props: {
@@ -122,16 +111,23 @@ export default {
     },
     isLoginPage() {
       return this.$route.path === LOGIN_PATH
-    },
-    isRegistered() {
-      const currentUser = firebase.auth().currentUser
-      return currentUser && this.$route.path !== HOME_PATH
     }
   },
   methods: {
     homeClick() {
       !this.user && this.$router.push('/')
+    },
+    async isRegistered() {
+      const currentUser = await firebase.auth().currentUser
+      this.isRegisteredUser =
+        !!currentUser &&
+        this.$route.path !== HOME_PATH &&
+        this.$route.path !== LOGIN_PATH &&
+        this.$route.path !== REGISTER_PATH
     }
+  },
+  created() {
+    this.isRegistered()
   }
 }
 </script>
@@ -163,7 +159,7 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
-  .header__logo{
+  .header__logo {
     display: none;
   }
 }

@@ -8,16 +8,12 @@
 <script>
 import LeftPanel from './LeftPanel'
 import PersonalInformation from './PersonalInformation'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'ProfileContent',
   components: {
     LeftPanel,
     PersonalInformation
-  },
-  computed: {
-    ...mapGetters(['user'])
   }
 }
 </script>

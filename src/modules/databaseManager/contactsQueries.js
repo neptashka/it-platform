@@ -42,7 +42,7 @@ async function getPersonalInfo(id) {
 
 async function getJobInfo(id) {
   const companiesSnapshot = await db
-    .collection('details')
+    .collection('job-details')
     .where('itSpecialistId', '==', id)
     .get()
   let contacts = []

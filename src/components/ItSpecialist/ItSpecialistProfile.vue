@@ -9,8 +9,9 @@
       <v-alert
         v-if="!personalData"
         class="alert"
-        v-model="personalDataALert"
+        v-model="personalDataAlert"
         dismissible
+        outline
         type="warning">
         Ви не заповнили контактні дані. Для цього натисніть кнопку "Контактні дані" та заповніть всі поля.
       </v-alert>
@@ -19,8 +20,18 @@
         class="alert"
         v-model="jobDataAlert"
         dismissible
+        outline
         type="warning">
         Ви не заповнили професійні дані. Для цього натисніть кнопку "Профейсійні дані" та заповніть всі поля.
+      </v-alert>
+      <v-alert
+        v-if="isInfoAlert()"
+        class="alert"
+        :value="true"
+        outline
+        type="info"
+      >
+        Ви заповнили всі дані, але ще не надіслали заявку. Натисніть "Надіслати дані"
       </v-alert>
       <div v-if="requestSent">
         <EmployeeAnnouncement></EmployeeAnnouncement>
@@ -36,7 +47,7 @@ export default {
   name: 'ItSpecialistProfile',
   data() {
     return {
-      personalDataALert: !this.personalData,
+      personalDataAlert: !this.personalData,
       jobDataAlert: !this.jobData
     }
   },
@@ -48,8 +59,14 @@ export default {
       'jobData',
       'personalData',
       'requestSent',
-      'user'
+      'user',
+      'profile'
     ])
+  },
+  methods: {
+    isInfoAlert() {
+      return this.profile === 100 && !this.requestSent
+    }
   }
 }
 </script>
@@ -75,7 +92,7 @@ export default {
   width: 80%;
   margin-top: 20px;
 }
-.alert{
+.alert {
   margin-top: 10px;
 }
 </style>

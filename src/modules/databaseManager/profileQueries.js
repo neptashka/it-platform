@@ -1,6 +1,5 @@
 import { db } from '../../main'
 import store from '../../store'
-import {HR_MANAGER, IT_SPECIALIST} from '../../constants/userTypes'
 
 const addJobData = function (data) {
   db.collection('job-details')

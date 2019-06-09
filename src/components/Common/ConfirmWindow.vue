@@ -5,10 +5,10 @@
       <v-card-text>{{ text }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" flat @click.stop="dialog = false"
+        <v-btn color="teal" flat @click.stop="dialog = false"
           >Ні</v-btn
         >
-        <v-btn color="green darken-1" flat @click.stop="sendData">Так</v-btn>
+        <v-btn color="teal" flat @click.stop="sendData">Так</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

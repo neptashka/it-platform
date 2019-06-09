@@ -128,6 +128,7 @@
 <script>
 import { languages, jobExperience, cities } from '../../constants/filters'
 import { mapGetters } from 'vuex'
+import { addVacancyToDb } from '../../modules/databaseManager/vacanciesQueries'
 
 export default {
   name: 'AddVacancy',
@@ -159,12 +160,21 @@ export default {
         }
       }
     },
-    ...mapGetters(['selectedItCompany'])
+    ...mapGetters(['selectedItCompany', 'itCompanies'])
   },
   methods: {
     saveProfData() {
-      console.log('FORM', this.form)
-      console.log('IT COMPANY', this.selectedItCompany)
+      const company = this.itCompanies.find(el => el.companyName === this.selectedItCompany)
+      const obj = { ...this.form, companyId: company.id }
+      addVacancyToDb(obj)
+      if(this.profile !== 100) {
+        this.$toasted.show('Вакансію успішно створено!', {
+          theme: 'toasted-primary',
+          type: 'warning',
+          position: 'top-center',
+          duration: 3000
+        })
+      }
       this.show = false
     }
   }

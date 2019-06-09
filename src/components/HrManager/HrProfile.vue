@@ -6,21 +6,22 @@
           Профіль HR-менеджера
         </p>
       </div>
-      <!--<v-alert-->
-      <!--class="alert"-->
-      <!--v-model="personalDataALert"-->
-      <!--dismissible-->
-      <!--type="warning">-->
-      <!--Ви не заповнили контактні дані. Для цього натисніть кнопку "Контактні дані" та заповніть всі поля.-->
-      <!--</v-alert>-->
-      <!--<v-alert-->
-      <!--v-if="!jobData"-->
-      <!--class="alert"-->
-      <!--v-model="jobDataAlert"-->
-      <!--dismissible-->
-      <!--type="warning">-->
-      <!--Ви не заповнили професійні дані. Для цього натисніть кнопку "Профейсійні дані" та заповніть всі поля.-->
-      <!--</v-alert>-->
+      <v-alert
+        class="alert"
+        v-model="itCompanyAlert"
+        dismissible
+        outline
+        type="warning">
+        Ви не заповнили інформацію про ІТ-компанію. Для цього або виберіть ІТ-компанію із списку існуючих, або створіть нову.
+      </v-alert>
+      <v-alert
+        class="alert"
+        v-model="vacancyAlert"
+        dismissible
+        outline
+        type="warning">
+        Ви ще не створили жодної вакансії!
+      </v-alert>
       <v-card v-if="hrContact" class="form" color="#fff">
         <div class="horizontal-container">
           <div class="form__avatar">
@@ -33,9 +34,9 @@
           </div>
           <div class="form__text-content">
             <div class="form__title">
-          <span class="form--text form--header">
-            {{ hrContact.title }}
-          </span>
+            <span class="form--text form--header">
+              {{ hrContact.title }}
+            </span>
             </div>
             <p class="form--text form__requirmentes">
               {{ hrContact.description }}
@@ -49,7 +50,7 @@
           <p><span class="bold">Номер телефону:</span> {{ hrContact.phone }}</p>
         </div>
         <div class="text-horizontal form--text">
-          <p><span class="bold"> Резюме:</span> {{ hrContact.cv }}</p>
+          <p><span class="bold"> Резюме:</span><a :href="getCvUrl()">{{ hrContact.cv }}</a></p>
         </div>
         <div class="text-horizontal form--text">
           <p><span class="bold"> Skype:</span> {{ hrContact.skype }}</p>
@@ -71,11 +72,27 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { storageService } from '../../main'
 
 export default {
   name: 'HrProfile',
+  data() {
+    return {
+      itCompanyAlert: true,
+      vacancyAlert: true
+    }
+  },
   computed: {
     ...mapGetters(['hrContact'])
+  },
+  methods: {
+    async getCvUrl() {
+      const pathReference = storageService.ref(`cv/${this.hrContact.cv}`)
+      const cvUrl = await pathReference.getDownloadURL().then(function(url) {
+        return url
+      })
+      return cvUrl
+    }
   }
 }
 </script>

@@ -39,7 +39,17 @@ async function getRequests() {
   store.dispatch('initFilteredRequests', vacancies)
 }
 
+const addVacancyToDb = function(vacancy) {
+  db.collection('vacancies')
+    .add(vacancy)
+    .then(function(docRef) {})
+    .catch(function(error) {
+      alert(`Error ${error}`)
+    })
+}
+
 export {
   getVacancies,
-  getRequests
+  getRequests,
+  addVacancyToDb
 }

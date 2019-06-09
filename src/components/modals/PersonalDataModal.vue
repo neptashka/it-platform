@@ -1,14 +1,9 @@
 <template>
-  <v-dialog
-    v-model="show"
-    persistent
-    max-width="850"
-  >
+  <v-dialog v-model="show" persistent max-width="850">
     <v-card>
       <v-card-title class="form-title__container pa-1">
         <v-spacer />
-        <span
-            class="job-form__header">
+        <span class="job-form__header">
           Персональні дані
         </span>
         <v-spacer />
@@ -18,7 +13,8 @@
           small
           color="#4AD59E"
           @click.stop="show = false"
-          class="form-title__icon-close">
+          class="form-title__icon-close"
+        >
           <v-icon>
             close
           </v-icon>
@@ -30,23 +26,16 @@
           lazy-validation
           :rules="jobNameRule"
           v-model="validForm"
-          class="job-form">
+          class="job-form"
+        >
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex
-                  align-self-center
-                  xs2
-                  mt-1>
-                <label
-                    class="job-form__label">
+              <v-flex align-self-center xs2 mt-1>
+                <label class="job-form__label">
                   Повне ім'я
                 </label>
               </v-flex>
-              <v-flex
-                  xs10
-                  my-2
-                  class="job-form__field"
-              >
+              <v-flex xs10 my-2 class="job-form__field">
                 <v-text-field
                   v-model="form.fullName"
                   :rules="jobNameRule"
@@ -61,8 +50,7 @@
                 </v-text-field>
               </v-flex>
               <v-flex align-self-center xs2 my-2>
-                <label
-                    class="job-form__label">
+                <label class="job-form__label">
                   Номер телефону
                 </label>
               </v-flex>
@@ -81,8 +69,7 @@
                 </v-text-field>
               </v-flex>
               <v-flex align-self-center xs2 mt-1 mb-4>
-                <label
-                    class="job-form__label">
+                <label class="job-form__label">
                   Електронна пошта
                 </label>
               </v-flex>
@@ -101,15 +88,16 @@
                 </v-text-field>
               </v-flex>
               <v-flex align-self-center xs2 mb-5>
-                <label
-                    class="job-form__label">
+                <label class="job-form__label">
                   Скайп
                 </label>
               </v-flex>
               <v-flex xs10 mt-2>
                 <v-text-field
                   v-model="form.skype"
-                  :value="personalData && personalData.skype ? personalData.skype : ''"
+                  :value="
+                    personalData && personalData.skype ? personalData.skype : ''
+                  "
                   required
                   color="#4AD59E"
                   single-line
@@ -120,25 +108,17 @@
                 </v-text-field>
               </v-flex>
               <v-flex align-self-center xs2 mb-5>
-                <label
-                    class="job-form__label">
+                <label class="job-form__label">
                   Посилання на резюме
                 </label>
               </v-flex>
               <v-flex xs10 mt-2>
                 <v-text-field
+                  label="Select Image"
+                  @click="pickFile"
                   v-model="form.cv"
-                  :value="
-                    personalData && personalData.cv ? personalData.cv : ''
-                  "
-                  required
-                  color="#4AD59E"
-                  single-line
-                  outline
-                  height="50"
-                  clearable
-                >
-                </v-text-field>
+                  prepend-icon="attach_file"
+                ></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -150,10 +130,18 @@
           :disabled="!validForm"
           class="green-button button-round-white"
           flat
-          round>
+          round
+        >
           Зберегти
         </v-btn>
       </v-card-actions>
+      <input
+        type="file"
+        style="display: none"
+        ref="image"
+        accept=".doc,.docx,.pdf"
+        @change="onFilePicked"
+      />
     </v-card>
   </v-dialog>
 </template>
@@ -161,6 +149,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { addPesonalData } from '../../modules/databaseManager/profileQueries'
+import { storageRef } from '../../main'
 
 export default {
   name: 'PersonalDataModal',
@@ -176,11 +165,11 @@ export default {
         cv: ''
       },
       jobTitle: '',
-      jobNameRule: [
-        v => !!v || `Це поле є обов'язковим`
-      ],
+      jobNameRule: [v => !!v || `Це поле є обов'язковим`],
       jobPhoneRule: [
-        v => /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(v) || 'Некоректний телефон',
+        v =>
+          /^(\+\d{1,3}[- ]?)?\d{10}$/.test(v) ||
+          'Некоректний телефон',
         v => !!v || `Це поле є обов'язковим`
       ],
       jobEmailRule: [
@@ -200,11 +189,7 @@ export default {
         }
       }
     },
-    ...mapGetters([
-      'user',
-      'personalData',
-      'itSpecialist'
-    ])
+    ...mapGetters(['user', 'personalData', 'itSpecialist'])
   },
   methods: {
     ...mapActions(['updatePersonalData']),
@@ -222,11 +207,41 @@ export default {
         duration: 3000
       })
       this.show = false
+    },
+    pickFile() {
+      this.$refs.image.click()
+    },
+    onFilePicked(e) {
+      let selectedFile
+      const files = e.target.files
+      if (files[0] !== undefined) {
+        selectedFile = files[0]
+        this.form.cv = selectedFile.name
+      }
+      const uploadTask = storageRef
+        .child(`cv/${this.form.cv}`)
+        .put(selectedFile)
+      uploadTask.on(
+        'state_changed',
+        snapshot => {},
+        error => {
+          // Handle unsuccessful uploads
+          console.log(error)
+        },
+        () => {
+          // Do something once upload is complete
+          console.log('success')
+        }
+      )
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped></style>
+<style>
+.job-form .v-text-field {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 </style>

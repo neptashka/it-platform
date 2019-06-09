@@ -32,7 +32,7 @@
     </JobDataModal>
     <v-btn
       flat
-      @click.stop = "showPersonalDataModal = true"
+      @click.stop="showPersonalDataModal = true"
       class="profile__button">
       Персональні дані
     </v-btn>
@@ -89,10 +89,12 @@ export default {
     ])
   },
   mounted() {
-    const id = this.user.userId
-    getJobData(id)
-    getPersonalData(id)
-    this.calculateProgress()
+    if (this.user) {
+      const id = this.user.userId
+      getJobData(id)
+      getPersonalData(id)
+      this.calculateProgress()
+    }
   },
   methods: {
     ...mapActions([
@@ -131,6 +133,7 @@ export default {
         fr.readAsDataURL(file)
         fr.addEventListener('load', () => {
           this.updateDevImage(fr.result)
+          this.$forceUpdate()
         })
       }
     },

@@ -60,9 +60,6 @@ export default {
       }
     },
     ...mapActions(['updateSelectedItCompany', 'updateHrProgress'])
-  },
-  mounted() {
-  	console.log(this.itCompanies)
   }
 }
 </script>

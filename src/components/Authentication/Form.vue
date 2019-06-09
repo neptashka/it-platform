@@ -92,10 +92,6 @@ export default {
         .then(
           () => {
             const collection = `${this.userType}s`
-            this.updateUser({
-              email: this.email,
-              type: this.userType
-            })
             addTypeUser(
               {
                 email: this.email
