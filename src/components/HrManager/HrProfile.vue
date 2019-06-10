@@ -11,79 +11,141 @@
         v-model="itCompanyAlert"
         dismissible
         outline
-        type="warning">
-        Ви не заповнили інформацію про ІТ-компанію. Для цього або виберіть ІТ-компанію із списку існуючих, або створіть нову.
+        type="warning"
+      >
+        Ви не заповнили інформацію про ІТ-компанію. Для цього або виберіть
+        ІТ-компанію із списку існуючих, або створіть нову.
       </v-alert>
       <v-alert
         class="alert"
         v-model="vacancyAlert"
         dismissible
         outline
-        type="warning">
+        type="warning"
+      >
         Ви ще не створили жодної вакансії!
       </v-alert>
-      <v-card v-if="hrContact" class="form" color="#fff">
+      <v-card v-if="sentVacancy" class="form" color="#7AE8C1">
         <div class="horizontal-container">
           <div class="form__avatar">
             <v-avatar size="50">
-              <img :src="hrContact.image" alt="" />
+              <img :src="sentVacancy.image" alt="" />
             </v-avatar>
-            <span class="form--text form--small-text bold">
-              {{ hrContact.fullName }}
+            <span class="form--text form--small-text">
+              {{ sentVacancy.companyName }}
             </span>
           </div>
           <div class="form__text-content">
             <div class="form__title">
-            <span class="form--text form--header">
-              {{ hrContact.title }}
-            </span>
+              <span class="form--text form--header">
+                {{ sentVacancy.title }}
+              </span>
             </div>
             <p class="form--text form__requirmentes">
-              {{ hrContact.description }}
+              {{ sentVacancy.requirements }}
             </p>
           </div>
         </div>
-        <div class="text-horizontal form--text">
-          <p><span class="bold">Досвід роботи:</span> {{ hrContact.experience }}</p>
-        </div>
-        <div class="text-horizontal form--text">
-          <p><span class="bold">Номер телефону:</span> {{ hrContact.phone }}</p>
-        </div>
-        <div class="text-horizontal form--text">
-          <p><span class="bold"> Резюме:</span><a :href="getCvUrl()">{{ hrContact.cv }}</a></p>
-        </div>
-        <div class="text-horizontal form--text">
-          <p><span class="bold"> Skype:</span> {{ hrContact.skype }}</p>
-        </div>
         <div class="form__footer">
           <div class="form__location">
-            <v-icon class="location__icon" color="#000">
+            <v-icon class="location__icon" color="#fff">
               location_on
             </v-icon>
             <span class="location__text form--text">
-              {{ hrContact.city }}
+              {{ sentVacancy.city }}
             </span>
+          </div>
+          <div class="form__button-container">
+            <v-btn
+              dark
+              small
+              flat
+              color="#000"
+              class="form__view-button"
+            >
+              Видалити
+            </v-btn>
           </div>
         </div>
       </v-card>
+      <div v-if="hrContact">
+        <p class="contact__header">Надіслані контакти</p>
+        <v-card class="form" color="#fff">
+          <div class="horizontal-container">
+            <div class="form__avatar">
+              <v-avatar size="50">
+                <img :src="hrContact.image" alt="" />
+              </v-avatar>
+              <span class="form--text form--small-text bold">
+                {{ hrContact.fullName }}
+              </span>
+            </div>
+            <div class="form__text-content">
+              <div class="form__title">
+                <span class="form--text form--header">
+                  {{ hrContact.title }}
+                </span>
+              </div>
+              <p class="form--text form__requirmentes">
+                {{ hrContact.description }}
+              </p>
+            </div>
+          </div>
+          <div class="text-horizontal form--text">
+            <p>
+              <span class="bold">Досвід роботи:</span>
+              {{ hrContact.experience }}
+            </p>
+          </div>
+          <div class="text-horizontal form--text">
+            <p>
+              <span class="bold">Номер телефону:</span> {{ hrContact.phone }}
+            </p>
+          </div>
+          <div class="text-horizontal form--text">
+            <p>
+              <span class="bold"> Резюме:</span
+              ><a :href="getCvUrl()">{{ hrContact.cv }}</a>
+            </p>
+          </div>
+          <div class="text-horizontal form--text">
+            <p><span class="bold"> Skype:</span> {{ hrContact.skype }}</p>
+          </div>
+          <div class="form__footer">
+            <div class="form__location">
+              <v-icon class="location__icon" color="#000">
+                location_on
+              </v-icon>
+              <span class="location__text form--text">
+                {{ hrContact.city }}
+              </span>
+            </div>
+          </div>
+        </v-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { storageService } from '../../main'
 
 export default {
   name: 'HrProfile',
   data() {
     return {
-      itCompanyAlert: true,
-      vacancyAlert: true
+      itCompanyAlert: !this.selectedItCompany,
+      vacancyAlert: !this.sentVacancy
     }
   },
   computed: {
-    ...mapGetters(['hrContact'])
+    ...mapGetters([
+      'hrContact',
+      'selectedItCompany',
+      'hrProgress',
+      'sentVacancy'
+    ])
   },
   methods: {
     async getCvUrl() {
@@ -92,20 +154,44 @@ export default {
         return url
       })
       return cvUrl
+    },
+    isInfoAlert() {
+      return this.hrProgress === 60 && !this.sentVacancy
+    },
+    calculateProgress() {
+      let progress = 20
+      if (this.selectedItCompany) progress += 40
+      if (this.sentVacancy) progress += 40
+      this.updateHrProgress(progress)
+    },
+    ...mapActions(['updateHrProgress'])
+  },
+  watch: {
+    selectedItCompany(value) {
+      this.itCompanyAlert = !value
+      this.calculateProgress()
+    },
+    sentVacancy(value) {
+      this.vacancyAlert = !value
+      this.calculateProgress()
     }
+  },
+  mounted() {
+    this.itCompanyAlert = !this.selectedItCompany
+    this.vacancyAlert = !this.sentVacancy
   }
 }
 </script>
 
 <style scoped>
-  .bold {
-    font-weight: 700;
-  }
+.bold {
+  font-weight: 700;
+}
 .form {
   width: 100%;
   padding: 10px 0 5px 0;
 }
-.text-horizontal{
+.text-horizontal {
   margin-left: 113px;
   font-size: 14px;
 }
@@ -171,5 +257,10 @@ export default {
 .visible-icon {
   visibility: hidden;
   margin-right: 10px;
+}
+.contact__header {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 20px;
 }
 </style>

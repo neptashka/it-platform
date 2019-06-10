@@ -40,7 +40,8 @@ const addTypeUser = function(user, collection) {
       } else {
         getItCompanies()
         store.dispatch('updateHrManager', {
-          email: user.email
+          email: user.email,
+          hrManagerId: docRef.id
         })
       }
       store.dispatch('updateUser', {

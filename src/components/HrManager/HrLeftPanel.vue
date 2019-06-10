@@ -57,7 +57,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['hrManager', 'hrProgress'])
+    ...mapGetters([
+      'hrManager',
+      'hrProgress',
+      'selectedItCompany'])
   },
   mixins: [loadImageMixin],
   methods: {

@@ -127,8 +127,8 @@
 
 <script>
 import { languages, jobExperience, cities } from '../../constants/filters'
-import { mapGetters } from 'vuex'
-import { addVacancyToDb } from '../../modules/databaseManager/vacanciesQueries'
+import { mapGetters, mapActions } from 'vuex'
+import { addVacancyToDb, getHrManagerId } from '../../modules/databaseManager/vacanciesQueries'
 
 export default {
   name: 'AddVacancy',
@@ -160,23 +160,32 @@ export default {
         }
       }
     },
-    ...mapGetters(['selectedItCompany', 'itCompanies'])
+    ...mapGetters(['selectedItCompany', 'itCompanies', 'hrManager'])
   },
   methods: {
-    saveProfData() {
+    ...mapActions([
+      'updateSentVacancy'
+    ]),
+    async saveProfData() {
       const company = this.itCompanies.find(el => el.companyName === this.selectedItCompany)
-      const obj = { ...this.form, companyId: company.id }
+      const hrManagerId = this.hrManager.hrManagerId
+      const obj = { ...this.form, companyId: company.id, hrManagerId }
+      console.log('TEST', obj)
+      this.updateSentVacancy({ ...obj, ...company })
       addVacancyToDb(obj)
       if(this.profile !== 100) {
         this.$toasted.show('Вакансію успішно створено!', {
           theme: 'toasted-primary',
-          type: 'warning',
+          type: 'success',
           position: 'top-center',
           duration: 3000
         })
       }
       this.show = false
     }
+  },
+  mounted() {
+    console.log('HR MANAGER', this.hrManager)
   }
 }
 </script>

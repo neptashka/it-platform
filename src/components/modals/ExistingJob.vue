@@ -43,7 +43,7 @@ export default {
         }
       }
     },
-    ...mapGetters(['itCompanies', 'hrProgress'])
+    ...mapGetters(['itCompanies'])
   },
   methods: {
     save() {
@@ -55,11 +55,8 @@ export default {
         duration: 3000
       })
       this.updateSelectedItCompany(this.selectedItem)
-      if (this.hrProgress === 20) {
-        this.updateHrProgress(60)
-      }
     },
-    ...mapActions(['updateSelectedItCompany', 'updateHrProgress'])
+    ...mapActions(['updateSelectedItCompany'])
   }
 }
 </script>

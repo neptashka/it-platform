@@ -1,6 +1,10 @@
 import { db } from '../../main'
 import { getCompanyInfo, getHrInfo } from './itCompaniesQuries'
 import store from '../../store'
+import {HR_MANAGER, IT_SPECIALIST} from '../../constants/userTypes'
+import {isRequestSent} from './profileQueries'
+import {getContacts} from './contactsQueries'
+import {getItCompanies} from './hrManagerQueries'
 
 /**
  * @function getVacancies - asynchronous function to get all vacancies
@@ -48,8 +52,21 @@ const addVacancyToDb = function(vacancy) {
     })
 }
 
+async function getHrManagerId(email) {
+  const hrManagerSnapSHot = await db
+    .collection('hr-managers')
+    .where('email', '==', email)
+    .get()
+  let hrs = []
+  for (let doc of hrManagerSnapSHot.docs) {
+    hrs.push(doc.id)
+  }
+  return hrs[0]
+}
+
 export {
   getVacancies,
   getRequests,
-  addVacancyToDb
+  addVacancyToDb,
+  getHrManagerId
 }
