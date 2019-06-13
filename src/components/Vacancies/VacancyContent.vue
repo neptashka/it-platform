@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { getVacancies } from '../../modules/databaseManager/vacanciesQueries'
+import { getAllVacancies } from '../../modules/databaseManager/vacanciesQueries'
 import AsideFilterPanel from './AsideFilterPanel'
 import VacancyForm from './VacancyForm'
 import { mapGetters } from 'vuex'
@@ -21,7 +21,7 @@ export default {
     ...mapGetters(['vacancies'])
   },
   created() {
-    getVacancies()
+    getAllVacancies()
   }
 }
 </script>

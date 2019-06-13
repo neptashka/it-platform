@@ -230,7 +230,6 @@ export default {
         },
         () => {
           // Do something once upload is complete
-          console.log('success')
         }
       )
     }

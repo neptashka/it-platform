@@ -47,3 +47,11 @@ export const jobExperience = [
   '4 роки',
   'Більше 5 років'
 ]
+
+export const english = [
+  'Beginner',
+  'Pre-Intermediate',
+  'Intermediate',
+  'Upper-intermediate',
+  'Advanced'
+]

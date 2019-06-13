@@ -32,6 +32,18 @@
         </div>
       </div>
     </div>
+    <div class="filter__section">
+      <p class="filter--header">
+        Рівень англійської
+      </p>
+      <div class="filter--header">
+        <v-select
+            v-model="English"
+            outline
+            :items="englishList"
+        ></v-select>
+      </div>
+    </div>
     <div class="filter__section-last">
       <p class="filter--header">
         Досвід роботи
@@ -48,10 +60,9 @@
 </template>
 
 <script>
-import { languages, cities } from '../../constants/filters'
+import { languages, cities, english } from '../../constants/filters'
 import { mapGetters, mapActions } from 'vuex'
 import { jobExperience } from '../../constants/filters'
-import Vue from 'vue'
 
 export default {
   name: 'AsideFilterPanel',
@@ -60,35 +71,52 @@ export default {
       programLanguages: languages,
       citiesToWork: cities,
       yearsWorked: jobExperience,
+      englishList: english,
+      English: null,
       experience: null,
-      citiesFilters: {},
-      languagesFilters: {}
+      citiesFilters: [],
+      languagesFilters: []
     }
   },
   methods: {
     chooseClassForLang(element) {
-      return this.languagesFilters[element]
+      const index = this.languagesFilters.indexOf(element)
+      return index > - 1
         ? 'active-class'
         : 'passive-class'
     },
     selectedLang(element) {
-      Vue.set(this.languagesFilters, element, !this.languagesFilters[element])
+      // Vue.set(this.languagesFilters, element, !this.languagesFilters[element])
+      const index = this.languagesFilters.indexOf(element)
+      if (index > -1) {
+        this.languagesFilters.splice(index, 1)
+      } else {
+        this.languagesFilters.push(element)
+      }
       this.updateFilters()
     },
     chooseClassForCity(element) {
-      return this.citiesFilters[element]
+      const index = this.citiesFilters.indexOf(element)
+      return index > - 1
         ? 'active-class'
         : 'passive-class'
     },
     selectedCity(element) {
-      Vue.set(this.citiesFilters, element, !this.citiesFilters[element])
+      // Vue.set(this.citiesFilters, element, !this.citiesFilters[element])
+      const index = this.citiesFilters.indexOf(element)
+      if (index > -1) {
+        this.citiesFilters.splice(index, 1)
+      } else {
+        this.citiesFilters.push(element)
+      }
       this.updateFilters()
     },
     updateFilters() {
       const filters = {
         cities: this.citiesFilters,
         languages: this.languagesFilters,
-        jobExperience:this.experience
+        jobExperience: this.experience,
+        English: this.English
       }
       this.updateFilteredVacancies({
         filters,
@@ -105,7 +133,10 @@ export default {
     ])
   },
   watch: {
-    experience(value) {
+    experience() {
+      this.updateFilters()
+    },
+    English() {
       this.updateFilters()
     }
   }
@@ -123,7 +154,7 @@ export default {
   overflow-y: auto;
 }
 .filter__section {
-  margin-top: 20px;
+  margin-top: 10px;
   width: 80%;
   border-bottom: 1px solid #707070;
   padding-bottom: 20px;
@@ -133,6 +164,7 @@ export default {
   color: #000;
   font-weight: bold;
   text-align: center;
+  margin-bottom: 7px;
 }
 .filter__chips {
   display: flex;
@@ -158,7 +190,7 @@ export default {
   background-color: #e6e6e6;
 }
 .aside-filter-panel {
-  height: calc(100% - 50px);
+  height: calc(100vh - 50px);
   overflow-y: auto;
 }
 .aside-filter-panel::-webkit-scrollbar {
@@ -175,7 +207,7 @@ export default {
   background: #d5d5d5;
 }
 .filter__section-last {
-  margin-top: 20px;
+  margin-top: 10px;
   width: 80%;
   padding-bottom: 20px;
 }

@@ -83,6 +83,10 @@ async function getUserByEmail(email) {
   }
 }
 
+/**
+ * @function getItSpecialist - gets information about it specialist from database and updates it in the store
+ * @param {String} id
+ */
 async function getItSpecialist(id) {
   const docRef = db.collection('it-specialists').doc(id)
   docRef
@@ -103,7 +107,10 @@ async function getHrManager(id) {
     .get()
     .then(function(doc) {
       if (doc.exists) {
-        store.dispatch('updateHrManager', doc.data())
+        store.dispatch('updateHrManager', {
+          ...doc.data(),
+          hrManagerId: doc.id
+        })
       }
     })
     .catch(function(error) {

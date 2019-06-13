@@ -7,7 +7,7 @@
         class="select-company"
         v-model="selectedItem"
         :items="itCompanies"
-        item-text="companyName"
+        item-text="name"
         label="ІТ-компанія"
       >
       </v-select>

@@ -29,10 +29,10 @@
         <div class="horizontal-container">
           <div class="form__avatar">
             <v-avatar size="50">
-              <img :src="sentVacancy.image" alt="" />
+              <img :src="sentVacancy.company.image" alt="" />
             </v-avatar>
             <span class="form--text form--small-text">
-              {{ sentVacancy.companyName }}
+              {{ sentVacancy.company.name }}
             </span>
           </div>
           <div class="form__text-content">

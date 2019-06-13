@@ -6,18 +6,26 @@
           <img :src="vacancy.company.image" alt="" />
         </v-avatar>
         <span class="form--text form--small-text">
-          {{ vacancy.company.companyName }}
+          {{ vacancy.company.name }}
         </span>
       </div>
       <div class="form__text-content">
         <div class="form__title">
           <span class="form--text form--header">
-            {{ vacancy.content.title }}
+            {{ vacancy.title }}
           </span>
         </div>
         <p class="form--text form__requirmentes">
-          {{ vacancy.content.requirements }}
+          {{ vacancy.requirements }}
         </p>
+        <div class="form--text form__english">
+          <p><span class="form--bold">English: </span>{{ vacancy.English }}</p>
+        </div>
+        <!--<div class="form__chips">-->
+          <!--<v-chip class="active-chip" v-for="chip in vacancy.languages">-->
+            <!--{{ chip }}-->
+          <!--</v-chip>-->
+        <!--</div>-->
       </div>
     </div>
     <div class="form__footer">
@@ -26,7 +34,7 @@
           location_on
         </v-icon>
         <span class="location__text form--text">
-          {{ vacancy.content.city }}
+          {{ vacancy.city }}
         </span>
       </div>
       <div class="form__button-container">
@@ -105,8 +113,8 @@ export default {
 <style scoped>
 .form {
   width: 100%;
-  height: 100%;
   padding: 10px 0 5px 0;
+  height: 100%;
 }
 .form--text {
   color: #fff;
@@ -120,7 +128,6 @@ export default {
 }
 .horizontal-container {
   width: 100%;
-  height: 70%;
   display: flex;
 }
 .form__text-content {
@@ -151,6 +158,9 @@ export default {
 .form__location {
   display: flex;
   margin-left: 10px;
+}
+.form--bold {
+  font-weight: 800;
 }
 .location__icon {
   width: 18px;
@@ -192,6 +202,13 @@ export default {
   }
   .form__view-button {
     display: none;
+  }
+  .active-chip {
+    background-color: white;
+    opacity: 0.8;
+  }
+  .form__chips {
+    width: 100%;
   }
 }
 </style>

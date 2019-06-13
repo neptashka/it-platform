@@ -6,51 +6,54 @@ import {
   UPDATE_FILTERED_REQUESTS,
   INIT_FILTERED_REQUESTS
 } from './constants'
-import { isEmptyObject, allFalseValues } from '../../../Tools/ObjectMethods'
+import {
+  filteredVacanciesArrayByArray,
+  filteredVacanciesByString,
+  getIntersection,
+  filteredVacanciesByArray
+} from '../../../Tools/Filters'
 
 export default {
   [UPDATE_VACANCIES](state, vacancies) {
     state.vacancies = vacancies
   },
   [UPDATE_FILTERED_VACANCIES](state, { filters, vacancies }) {
-    const languages = filters.languages
-    const cities = filters.cities
-    const exp = filters.jobExperience
-    let filteredCities = []
-    let filteredLanguages = []
-    if (isEmptyObject(cities) || allFalseValues(cities)) {
-      filteredCities = vacancies
-    } else {
-      filteredCities = vacancies.filter(vacancy => cities[vacancy.content.city])
-    }
-    if (filteredCities.length === 0) {
-      state.filteredVacancies = []
+
+    if (
+      filters.languages.length === 0 &&
+      !filters.jobExperience &&
+      filters.cities.length === 0 &&
+      !filters.English
+    ) {
+      state.filteredVacancies = vacancies
       return
-    } else {
-      if (isEmptyObject(languages) || allFalseValues(languages)) {
-        filteredLanguages = filteredCities
-      } else {
-        filteredLanguages = vacancies.filter(vacancy => {
-          let results = []
-          const array = vacancy.content.languages
-          Array.prototype.forEach.call(array, lang => {
-            if (languages[lang]) {
-              results.push(lang)
-            }
-          })
-          return results.length > 0
-        })
-        if (filteredLanguages.length === 0) {
-          state.filteredVacancies = []
-          return
-        }
-      }
-      if (exp) {
-        state.filteredVacancies = filteredLanguages.filter(
-          vacancy => vacancy.content.experience === exp
-        )
-      } else state.filteredVacancies = filteredLanguages
     }
+    const filtersArray = []
+    if (filters.languages.length > 0) {
+      filtersArray.push(
+        filteredVacanciesArrayByArray(vacancies, filters.languages, 'languages')
+      )
+    }
+    if (filters.cities.length > 0) {
+      filtersArray.push(
+        filteredVacanciesByArray(vacancies, filters.cities, 'city')
+      )
+    }
+    if (filters.jobExperience) {
+      filtersArray.push(
+        filteredVacanciesByString(
+          vacancies,
+          filters.jobExperience,
+          'experience'
+        )
+      )
+    }
+    if (filters.English) {
+      filtersArray.push(
+        filteredVacanciesByString(vacancies, filters.English, 'English')
+      )
+    }
+    state.filteredVacancies = getIntersection(filtersArray)
   },
   [INIT_FILTERED_VACANCIES](state, vacancies) {
     state.filteredVacancies = vacancies

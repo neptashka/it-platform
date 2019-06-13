@@ -78,6 +78,20 @@
                   outline
                 ></v-select>
               </v-flex>
+              <v-flex align-self-center xs2 my-2>
+                <label class="job-form__label">
+                  Рівень англійської
+                </label>
+              </v-flex>
+              <v-flex xs10 mt-2>
+                <v-select
+                  v-model="form.English"
+                  color="#4AD59E"
+                  :rules="jobArrayRule"
+                  :items="englishArray"
+                  outline
+                ></v-select>
+              </v-flex>
               <v-flex align-self-center xs2 mt-1 mb-4>
                 <label class="job-form__label">
                   Досвід роботи
@@ -126,9 +140,9 @@
 </template>
 
 <script>
-import { languages, jobExperience, cities } from '../../constants/filters'
+import { languages, jobExperience, cities, english } from '../../constants/filters'
 import { mapGetters, mapActions } from 'vuex'
-import { addVacancyToDb, getHrManagerId } from '../../modules/databaseManager/vacanciesQueries'
+import { addVacancyToDb } from '../../modules/databaseManager/vacanciesQueries'
 
 export default {
   name: 'AddVacancy',
@@ -138,12 +152,14 @@ export default {
       languageArray: languages,
       jobArray: jobExperience,
       citiesArray: cities,
+      englishArray: english,
       validForm: false,
       form: {
         title: '',
         languages: [],
         experience: '',
-        requirements: ''
+        requirements: '',
+        English: ''
       },
       jobNameRule: [v => !!v || `Це поле є обов'язковим`],
       jobArrayRule: [v => (!!v && v.length > 0) || `Це поле є обов'язковим`]
@@ -167,11 +183,10 @@ export default {
       'updateSentVacancy'
     ]),
     async saveProfData() {
-      const company = this.itCompanies.find(el => el.companyName === this.selectedItCompany)
+      const company = this.itCompanies.find(el => el.name === this.selectedItCompany)
       const hrManagerId = this.hrManager.hrManagerId
-      const obj = { ...this.form, companyId: company.id, hrManagerId }
-      console.log('TEST', obj)
-      this.updateSentVacancy({ ...obj, ...company })
+      const obj = { ...this.form, company, hrManagerId }
+      this.updateSentVacancy(obj)
       addVacancyToDb(obj)
       if(this.profile !== 100) {
         this.$toasted.show('Вакансію успішно створено!', {
@@ -183,11 +198,15 @@ export default {
       }
       this.show = false
     }
-  },
-  mounted() {
-    console.log('HR MANAGER', this.hrManager)
   }
 }
 </script>
 
-<style scoped></style>
+<style>
+.v-dialog {
+  overflow-y: hidden;
+}
+.v-dialog:not(.v-dialog--fullscreen) {
+  max-height: 98%;
+}
+</style>

@@ -45,7 +45,6 @@ export default {
   align-items: center;
 }
 .announcement {
-  height: 150px;
   width: 80%;
   margin: 20px 0 10px 0;
 }

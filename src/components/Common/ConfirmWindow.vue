@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     sendData() {
-      const hrId = this.vacancy.content.hrManagerId
+      const hrId = this.vacancy.hrManagerId
       const itSpecialistId = this.user.userId
       sendContacts({ hrId, itSpecialistId })
       this.dialog = false
