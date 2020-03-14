@@ -5,29 +5,37 @@
         Мови програмування
       </p>
       <div class="filter__chips">
-        <div
-          v-for="language in programLanguages">
+        <div v-for="language in programLanguages">
           <div
             class="chip"
             :class="chooseClassForLang(language)"
-            @click="selectedLang(language)">
+            @click="selectedLang(language)"
+          >
             {{ language }}
           </div>
         </div>
       </div>
     </div>
+    <div class="filter__section-last">
+      <p class="filter--header">
+        Досвід роботи
+      </p>
+      <div class="filter--header">
+        <v-select v-model="experience" outline :items="yearsWorked"></v-select>
+      </div>
+    </div>
     <div class="filter__section">
       <p class="filter--header">
-        Міста
+        ІТ-компанії
       </p>
       <div class="filter__chips">
-        <div
-          v-for="city in citiesToWork">
+        <div v-for="company in companiesArray">
           <div
             class="chip"
-            :class="chooseClassForCity(city)"
-            @click="selectedCity(city)">
-            {{ city }}
+            :class="chooseClassForCompany(company)"
+            @click="selectedCompany(company)"
+          >
+            {{ company }}
           </div>
         </div>
       </div>
@@ -37,23 +45,23 @@
         Рівень англійської
       </p>
       <div class="filter--header">
-        <v-select
-            v-model="English"
-            outline
-            :items="englishList"
-        ></v-select>
+        <v-select v-model="English" outline :items="englishList"></v-select>
       </div>
     </div>
-    <div class="filter__section-last">
+    <div class="filter__section">
       <p class="filter--header">
-        Досвід роботи
+        Міста
       </p>
-      <div class="filter--header">
-        <v-select
-          v-model="experience"
-          outline
-          :items="yearsWorked"
-        ></v-select>
+      <div class="filter__chips">
+        <div v-for="(city, index) in citiesToWork" :key="index">
+          <div
+            class="chip"
+            :class="chooseClassForCity(city)"
+            @click="selectedCity(city)"
+          >
+            {{ city }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -63,6 +71,7 @@
 import { languages, cities, english } from '../../constants/filters'
 import { mapGetters, mapActions } from 'vuex'
 import { jobExperience } from '../../constants/filters'
+import { getCompanies } from '../../modules/databaseManager/itCompaniesQuries'
 
 export default {
   name: 'AsideFilterPanel',
@@ -75,15 +84,15 @@ export default {
       English: null,
       experience: null,
       citiesFilters: [],
-      languagesFilters: []
+      languagesFilters: [],
+      companiesArray: [],
+      companiesFilters: []
     }
   },
   methods: {
     chooseClassForLang(element) {
       const index = this.languagesFilters.indexOf(element)
-      return index > - 1
-        ? 'active-class'
-        : 'passive-class'
+      return index > -1 ? 'active-class' : 'passive-class'
     },
     selectedLang(element) {
       // Vue.set(this.languagesFilters, element, !this.languagesFilters[element])
@@ -97,9 +106,11 @@ export default {
     },
     chooseClassForCity(element) {
       const index = this.citiesFilters.indexOf(element)
-      return index > - 1
-        ? 'active-class'
-        : 'passive-class'
+      return index > -1 ? 'active-class' : 'passive-class'
+    },
+    chooseClassForCompany(element) {
+      const index = this.companiesFilters.indexOf(element)
+      return index > -1 ? 'active-class' : 'passive-class'
     },
     selectedCity(element) {
       // Vue.set(this.citiesFilters, element, !this.citiesFilters[element])
@@ -111,26 +122,39 @@ export default {
       }
       this.updateFilters()
     },
+    selectedCompany(element) {
+      // Vue.set(this.citiesFilters, element, !this.citiesFilters[element])
+      const index = this.companiesFilters.indexOf(element)
+      if (index > -1) {
+        this.companiesFilters.splice(index, 1)
+      } else {
+        this.companiesFilters.push(element)
+      }
+      this.updateFilters()
+    },
     updateFilters() {
       const filters = {
         cities: this.citiesFilters,
         languages: this.languagesFilters,
         jobExperience: this.experience,
-        English: this.English
+        English: this.English,
+        companies: this.companiesFilters
       }
       this.updateFilteredVacancies({
         filters,
         vacancies: this.vacancies
       })
     },
-    ...mapActions([
-      'updateFilteredVacancies'
-    ])
+    async getItCompanis() {
+      this.companiesArray = await getCompanies()
+    },
+    ...mapActions(['updateFilteredVacancies'])
   },
   computed: {
-    ...mapGetters([
-      'vacancies'
-    ])
+    ...mapGetters(['vacancies'])
+  },
+  mounted() {
+    this.getItCompanis()
   },
   watch: {
     experience() {
@@ -156,15 +180,12 @@ export default {
 .filter__section {
   margin-top: 10px;
   width: 80%;
-  border-bottom: 1px solid #707070;
-  padding-bottom: 20px;
 }
 .filter--header {
   font-size: 20px;
   color: #000;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 7px;
 }
 .filter__chips {
   display: flex;
@@ -182,12 +203,6 @@ export default {
   align-items: center;
   justify-content: center;
   min-width: 50px;
-}
-.active-class {
-  background-image: linear-gradient(to top right, #54e38e, #41c7af);
-}
-.passive-class {
-  background-color: #e6e6e6;
 }
 .aside-filter-panel {
   height: calc(100vh - 50px);
@@ -209,6 +224,17 @@ export default {
 .filter__section-last {
   margin-top: 10px;
   width: 80%;
-  padding-bottom: 20px;
+}
+</style>
+
+<style>
+.filter--header .v-messages {
+  min-height: 0 !important;
+}
+.active-class {
+  background-image: linear-gradient(to top right, #54e38e, #41c7af);
+}
+.passive-class {
+  background-color: #e6e6e6;
 }
 </style>

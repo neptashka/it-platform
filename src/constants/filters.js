@@ -10,7 +10,12 @@ export const languages = [
   'HTML',
   'Angular',
   'React',
-  'Vue.js'
+  'Vue.js',
+  'Node.js',
+  'TypeScript',
+  'SQL',
+  'Swift',
+  'Objective C'
 ]
 
 export const cities = [
@@ -25,8 +30,7 @@ export const cities = [
   'Запоріжжя',
   'Дніпро',
   'Херсон',
-  'Миколаїв',
-  'Полатва'
+  'Миколаїв'
 ]
 
 export const jobExperienceMap = {

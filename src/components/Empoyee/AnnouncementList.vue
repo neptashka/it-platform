@@ -7,7 +7,7 @@
         class="announcement">
         <AnnouncementForm
           :request="request"
-          :color="cardColors[index]"
+          :color="cardColors[index % cardColors.length]"
           :shouldDelete="false">
         </AnnouncementForm>
       </div>
@@ -57,7 +57,7 @@ export default {
 }
 .vacancy-form {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 60px);
   overflow-y: auto;
   background-color: #fff;
   display: flex;

@@ -1,7 +1,7 @@
 <template>
   <AnnouncementForm
     :shouldDelete="true"
-    color="#3B579D"
+    color="#00ABEC"
     :request="jobData"
   ></AnnouncementForm>
 </template>

@@ -31,7 +31,8 @@
           small
           flat
           color="#000"
-          class="form__view-button">
+          class="form__view-button"
+        >
           Видалити
         </v-btn>
         <v-btn
@@ -39,10 +40,18 @@
           dark
           small
           flat
+          @click="sendRequest"
           color="#000"
-          class="form__view-button">
+          class="form__view-button"
+        >
           Обрати
         </v-btn>
+        <ConfirmAnnouncement
+          :request="request"
+          :visible="showModal"
+          @close="showModal = false"
+        >
+        </ConfirmAnnouncement>
       </div>
     </div>
   </v-card>
@@ -51,9 +60,18 @@
 <script>
 import { HR_MANAGER } from '../../constants/userTypes'
 import { mapGetters } from 'vuex'
+import ConfirmAnnouncement from './ConfirmAnnouncement'
 
 export default {
   name: 'AnnouncementForm',
+  components: {
+    ConfirmAnnouncement
+  },
+  data() {
+    return {
+      showModal: false
+    }
+  },
   props: {
     request: {
       city: String,
@@ -72,6 +90,9 @@ export default {
   methods: {
     isHr() {
       return this.user.type === HR_MANAGER
+    },
+    sendRequest() {
+      this.showModal = true
     }
   }
 }

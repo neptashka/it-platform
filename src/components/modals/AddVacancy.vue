@@ -140,7 +140,12 @@
 </template>
 
 <script>
-import { languages, jobExperience, cities, english } from '../../constants/filters'
+import {
+  languages,
+  jobExperience,
+  cities,
+  english
+} from '../../constants/filters'
 import { mapGetters, mapActions } from 'vuex'
 import { addVacancyToDb } from '../../modules/databaseManager/vacanciesQueries'
 
@@ -165,6 +170,11 @@ export default {
       jobArrayRule: [v => (!!v && v.length > 0) || `Це поле є обов'язковим`]
     }
   },
+  mounted() {
+    if (this.itCompany) {
+      this.citiesArray = this.itCompany.cities
+    }
+  },
   computed: {
     show: {
       get() {
@@ -176,19 +186,32 @@ export default {
         }
       }
     },
-    ...mapGetters(['selectedItCompany', 'itCompanies', 'hrManager'])
+    ...mapGetters([
+      'selectedItCompany',
+      'itCompanies',
+      'hrManager',
+      'itCompany',
+      'hrVacancies',
+      'user',
+      'hrVacanciesIds'
+    ])
   },
   methods: {
-    ...mapActions([
-      'updateSentVacancy'
-    ]),
+    ...mapActions(['updateSentVacancy', 'updateHrVacancies']),
     async saveProfData() {
-      const company = this.itCompanies.find(el => el.name === this.selectedItCompany)
       const hrManagerId = this.hrManager.hrManagerId
-      const obj = { ...this.form, company, hrManagerId }
-      this.updateSentVacancy(obj)
-      addVacancyToDb(obj)
-      if(this.profile !== 100) {
+      const obj = {
+        ...this.form,
+        company: this.itCompany,
+        hrManagerId
+      }
+      if (this.hrVacancies.length > 0) {
+        this.updateHrVacancies([...this.hrVacancies, obj])
+      } else {
+        this.updateHrVacancies([obj])
+      }
+      addVacancyToDb(obj, this.hrVacanciesIds, this.user.userId)
+      if (this.profile !== 100) {
         this.$toasted.show('Вакансію успішно створено!', {
           theme: 'toasted-primary',
           type: 'success',
@@ -197,6 +220,13 @@ export default {
         })
       }
       this.show = false
+    }
+  },
+  watch: {
+    itCompany(value) {
+      if (value.cities) {
+        this.citiesArray = this.itCompany.cities
+      }
     }
   }
 }

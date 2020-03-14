@@ -13,7 +13,7 @@ const sendContacts = function(data) {
     })
 }
 
-async function getContacts(id) {
+async function getContacts(id, vacancies) {
   const usersSnapShot = await db
     .collection('send-contacts')
     .where('hrId', '==', id)
@@ -22,13 +22,36 @@ async function getContacts(id) {
   for (let doc of usersSnapShot.docs) {
     contacts.push(doc.data())
   }
+  let contactsArray = []
   if (contacts.length > 0) {
-    const contact = contacts[0]
-    const id = contact.itSpecialistId
-    const personalInfo = await getPersonalInfo(id)
-    const jobInfo = await getJobInfo(id)
-    const result = { ...personalInfo, ...jobInfo }
-    store.dispatch('updateHrContact', result)
+    for (let i = 0; i < contacts.length; i++) {
+      const itSpecialistId = contacts[i].itSpecialistId
+      const personalInfo = await getPersonalInfo(itSpecialistId)
+      const jobInfo = await getJobInfo(itSpecialistId)
+      const vacancyId = contacts[i].vacancyId
+      contactsArray.push({
+        vacancyId,
+        content: { ...personalInfo, ...jobInfo }
+      })
+      // vacancies.forEach((vacancy, index) => {
+      //   if (vacancy.id === vacancyId) {
+      //     if (vacancy['contact']) {
+      //       vacancies[index].contact.push({ ...personalInfo, ...jobInfo })
+      //     } else {
+      //       vacancies[index].contact = [{ ...personalInfo, ...jobInfo }]
+      //     }
+      //   }
+      // })
+    }
+    vacancies.forEach(vacancy => (vacancy['contact'] = []))
+    contactsArray.forEach(contact => {
+      const vacancy = vacancies.find(el => el.id === contact.vacancyId)
+      const vacancyIndex = vacancies.indexOf(vacancy)
+      if (vacancyIndex > -1) {
+        vacancies[vacancyIndex].contact.push(contact.content)
+      }
+    })
+    store.dispatch('updateHrVacancies', vacancies)
   }
 }
 

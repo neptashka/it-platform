@@ -6,8 +6,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="teal" flat @click.stop="dialog = false"
-          >Ні</v-btn
-        >
+          >Ні</v-btn>
         <v-btn color="teal" flat @click.stop="sendData">Так</v-btn>
       </v-card-actions>
     </v-card>
@@ -43,7 +42,13 @@ export default {
     sendData() {
       const hrId = this.vacancy.hrManagerId
       const itSpecialistId = this.user.userId
-      sendContacts({ hrId, itSpecialistId })
+      sendContacts({ hrId, itSpecialistId, vacancyId: this.vacancy.id })
+      this.$toasted.show('Дані успішно надіслані', {
+        theme: 'toasted-primary',
+        type: 'success',
+        position: 'top-center',
+        duration: 3000
+      })
       this.dialog = false
     }
   }

@@ -1,7 +1,7 @@
 <template>
-  <v-card class="form" :color="color">
+  <v-card v-if="vacancy" class="form" :color="color">
     <div class="horizontal-container">
-      <div class="form__avatar">
+      <div v-if="vacancy.company" class="form__avatar">
         <v-avatar size="50">
           <img :src="vacancy.company.image" alt="" />
         </v-avatar>
@@ -113,7 +113,7 @@ export default {
 <style scoped>
 .form {
   width: 100%;
-  padding: 10px 0 5px 0;
+  padding: 10px 10px 5px 0;
   height: 100%;
 }
 .form--text {

@@ -3,7 +3,8 @@ import store from '../../store'
 import { IT_SPECIALIST, HR_MANAGER } from '../../constants/userTypes'
 import { isRequestSent } from './profileQueries'
 import { getContacts } from './contactsQueries'
-import { getItCompanies } from './hrManagerQueries'
+import { getItCompanies, getHrInfo } from './hrManagerQueries'
+import { initHrVacancies } from './hrManagerQueries'
 
 /**
  * @function addUser - adds user to collection 'users
@@ -77,8 +78,9 @@ async function getUserByEmail(email) {
       isRequestSent(user.userId)
     } else if (user && user.type === HR_MANAGER) {
       getHrManager(user.userId)
-      getContacts(user.userId)
       getItCompanies()
+      getHrInfo(user.userId)
+      initHrVacancies(user.userId)
     }
   }
 }

@@ -1,5 +1,6 @@
 import { db } from '../../main'
 import store from '../../store'
+import { updateHrVacancies } from './hrManagerQueries'
 
 async function getAllVacancies() {
   const vacanciesSnapShot = await db
@@ -16,31 +17,6 @@ async function getAllVacancies() {
   store.dispatch('initFilteredVacancies', vacancies)
 }
 
-/**
- * @function getVacancies - asynchronous function to get all vacancies
- * @returns {Promise<*>} - Array of vacancies
- */
-// async function getVacancies() {
-//   const vacanciesSnapShot = await db
-//     .collection('vacancies')
-//     .get()
-//   let vacancies = []
-//   for (let doc of vacanciesSnapShot.docs) {
-//     const companyId = doc.data().companyId
-//     const hrId = doc.data().hrManagerId
-//     const company = companyId ? await getCompanyInfo(companyId) : {}
-//     const hrManager = hrId ? await getHrInfo(hrId) : {}
-//     vacancies.push({
-//       id: doc.id,
-//       content: doc.data(),
-//       company,
-//       hrManager
-//     })
-//   }
-//   store.dispatch('updateVacancies', vacancies)
-//   store.dispatch('initFilteredVacancies', vacancies)
-// }
-
 async function getRequests() {
   const vacanciesSnapShot = await db
     .collection('employee-list')
@@ -53,10 +29,14 @@ async function getRequests() {
   store.dispatch('initFilteredRequests', vacancies)
 }
 
-const addVacancyToDb = function(vacancy) {
+const addVacancyToDb = function(vacancy, vacanciesIds, userId) {
   db.collection('vacancies')
     .add(vacancy)
-    .then(function(docRef) {})
+    .then(function(docRef) {
+      const vacancies = [...vacanciesIds, docRef.id]
+      store.dispatch('updateHrVacanciesIds', vacancies)
+      updateHrVacancies(vacancies, userId)
+    })
     .catch(function(error) {
       alert(`Error ${error}`)
     })
@@ -74,10 +54,30 @@ async function getHrManagerId(email) {
   return hrs[0]
 }
 
+async function getPopularVacancies() {
+  const snapshot = await db
+    .collection('send-contacts')
+    .get()
+  let popularVacanciesId = []
+  for (let doc of snapshot.docs) {
+    popularVacanciesId.push(doc.data().vacancyId)
+  }
+  popularVacanciesId = [...new Set(popularVacanciesId)]
+  let popularVacancies = []
+  for (let i = 0; i < popularVacanciesId.length; i++) {
+    const vacancy = await db
+      .collection('vacancies')
+      .doc(popularVacanciesId[i])
+      .get()
+    popularVacancies.push(vacancy.data())
+  }
+  return popularVacancies
+}
+
 export {
   // getVacancies,
   getRequests,
   addVacancyToDb,
-  getHrManagerId,
+  getPopularVacancies,
   getAllVacancies
 }

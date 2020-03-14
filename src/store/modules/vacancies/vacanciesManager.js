@@ -46,8 +46,8 @@ const userManager = {
     initFilteredRequests(store, requests) {
       store.commit(INIT_FILTERED_REQUESTS, requests)
     },
-    updateFilteredRequests(store, { filters, requests }) {
-      store.commit(UPDATE_FILTERED_REQUESTS, { filters, requests })
+    updateFilteredRequests(store, { filters, vacancies }) {
+      store.commit(UPDATE_FILTERED_REQUESTS, { filters, vacancies })
     }
   }
 }

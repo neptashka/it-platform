@@ -1,9 +1,14 @@
 <template>
   <div class="vacancy-form">
+    <div class="vacancy-form__length">
+      <p >
+        Кількість вакансій: {{ filteredVacancies.length }}
+      </p>
+    </div>
     <div
       v-for="(vacancy, index) in filteredVacancies"
       class="announcement">
-      <Form :vacancy="vacancy" :color="cardColors[index]"></Form>
+      <Form :vacancy="vacancy" :color="cardColors[index % cardColors.length]"></Form>
     </div>
   </div>
 </template>
@@ -34,7 +39,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .vacancy-form {
   width: 100%;
   height: calc(100vh - 60px);
@@ -46,7 +51,7 @@ export default {
 }
 .announcement {
   width: 80%;
-  margin: 20px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 .vacancy-form::-webkit-scrollbar {
   width: 10px;
@@ -60,5 +65,14 @@ export default {
 }
 .vacancy-form::-webkit-scrollbar-thumb:hover {
   background: #d5d5d5;
+}
+.vacancy-form__length {
+  font-size: 14px;
+  color: #787878;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 80%;
+  margin-top: 10px;
 }
 </style>

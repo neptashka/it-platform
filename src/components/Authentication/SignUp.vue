@@ -3,15 +3,21 @@
     class="authentication">
     <div class="authentication__buttons">
       <v-btn
-        class="green-button button-round-white"
-        :disabled="!userIsHr"
+        :class="{
+          'green-button': !userIsHr,
+          'button-round-white': !userIsHr,
+          usual: userIsHr
+        }"
         @click="chooseDevType()">
         ІТ-спеціаліст
       </v-btn>
       <h1>/</h1>
       <v-btn
-        class="green-button button-round-white"
-        :disabled="userIsHr"
+        :class="{
+          'green-button': userIsHr,
+          'button-round-white': userIsHr,
+          usual: !userIsHr
+        }"
         @click="chooseHrType()">
         HR-менеджер
       </v-btn>
@@ -105,5 +111,8 @@ export default {
   margin-top: 100px;
   display: flex;
   flex-direction: row;
+}
+.usual.v-btn:not(.v-btn--depressed):not(.v-btn--flat) {
+  box-shadow: none;
 }
 </style>

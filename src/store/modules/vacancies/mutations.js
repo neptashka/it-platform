@@ -18,12 +18,12 @@ export default {
     state.vacancies = vacancies
   },
   [UPDATE_FILTERED_VACANCIES](state, { filters, vacancies }) {
-
     if (
       filters.languages.length === 0 &&
       !filters.jobExperience &&
       filters.cities.length === 0 &&
-      !filters.English
+      !filters.English &&
+      filters.companies.length === 0
     ) {
       state.filteredVacancies = vacancies
       return
@@ -37,6 +37,13 @@ export default {
     if (filters.cities.length > 0) {
       filtersArray.push(
         filteredVacanciesByArray(vacancies, filters.cities, 'city')
+      )
+    }
+    if (filters.companies.length > 0) {
+      filtersArray.push(
+        vacancies.filter(vacancy =>
+          filters.companies.includes(vacancy.company.name)
+        )
       )
     }
     if (filters.jobExperience) {
@@ -62,7 +69,35 @@ export default {
     state.requests = vacancies
   },
   [UPDATE_FILTERED_REQUESTS](state, { filters, vacancies }) {
-    state.filteredRequests = vacancies
+    if (
+      filters.languages.length === 0 &&
+      !filters.jobExperience &&
+      filters.cities.length === 0
+    ) {
+      state.filteredRequests = vacancies
+      return
+    }
+    const filtersArray = []
+    if (filters.languages.length > 0) {
+      filtersArray.push(
+        filteredVacanciesArrayByArray(vacancies, filters.languages, 'languages')
+      )
+    }
+    if (filters.cities.length > 0) {
+      filtersArray.push(
+        filteredVacanciesByArray(vacancies, filters.cities, 'city')
+      )
+    }
+    if (filters.jobExperience) {
+      filtersArray.push(
+        filteredVacanciesByString(
+          vacancies,
+          filters.jobExperience,
+          'experience'
+        )
+      )
+    }
+    state.filteredRequests = getIntersection(filtersArray)
   },
   [INIT_FILTERED_REQUESTS](state, vacancies) {
     state.filteredRequests = vacancies

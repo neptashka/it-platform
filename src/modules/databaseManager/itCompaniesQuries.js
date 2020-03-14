@@ -16,7 +16,19 @@ async function getHrInfo(companyId) {
   return hrInfo.data()
 }
 
+async function getCompanies() {
+  const companies = await db
+    .collection('it-companies')
+    .get()
+  let companiesArray = []
+  for (let doc of companies.docs) {
+    companiesArray.push(doc.data().name)
+  }
+  return companiesArray
+}
+
 export {
   getCompanyInfo,
-  getHrInfo
+  getHrInfo,
+  getCompanies
 }

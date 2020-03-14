@@ -1,6 +1,6 @@
 <template>
   <v-carousel
-    interval="3000"
+    interval="5000"
     hide-delimiters>
     <v-carousel-item
       v-for="(item, i) in items"
@@ -80,10 +80,10 @@ export default {
   justify-content: space-around;
 }
 .slider__title {
-  font-size: 24px;
+  font-size: 18px;
   color: #fff;
 }
 .slider__image {
-  height: 400px;
+  height: 300px;
 }
 </style>

@@ -44,15 +44,7 @@
         round
         append
         color="white"
-        @click="$router.replace('/it-companies')"
-      >
-        ІТ-компанії
-      </v-btn>
-      <v-btn
-        flat
-        round
-        append
-        color="white"
+        :class="{ pressed: isItSpecialistPath }"
         @click="$router.replace('/it-specialists')"
       >
         ІТ-спеціалісти
@@ -62,6 +54,7 @@
         round
         append
         color="white"
+        :class="{ pressed: isVacanciesPage }"
         @click="$router.replace('/vacancies')"
       >
         Вакансії
@@ -72,6 +65,7 @@
         append
         color="white"
         fab
+        :class="{ pressed: isProfilePage }"
         small
         @click="$router.push('/profile')"
       >
@@ -89,6 +83,9 @@ import firebase from 'firebase'
 const HOME_PATH = '/'
 const REGISTER_PATH = '/register'
 const LOGIN_PATH = '/login'
+const PROFILE_PATH = '/profile'
+const VACANCIES_PATH = '/vacancies'
+const IT_SPECIALISTS_PATH = '/it-specialists'
 
 export default {
   name: 'Header',
@@ -111,6 +108,15 @@ export default {
     },
     isLoginPage() {
       return this.$route.path === LOGIN_PATH
+    },
+    isProfilePage() {
+      return this.$route.path === PROFILE_PATH
+    },
+    isVacanciesPage() {
+      return this.$route.path === VACANCIES_PATH
+    },
+    isItSpecialistPath() {
+      return this.$route.path === IT_SPECIALISTS_PATH
     }
   },
   methods: {
@@ -156,6 +162,9 @@ export default {
 }
 .icon-button {
   width: 24px;
+}
+.pressed {
+  background: rgb(255, 255, 255, 0.5);
 }
 
 @media only screen and (max-width: 600px) {
